@@ -13,6 +13,7 @@ public class Main {
         System.out.println("new line-2-1");
         System.out.println("prosto tak");
         System.out.println("local-line");
+        System.out.println("rebase");
     }
 }
 
