@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
    http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-    <!--    <servlet>-->
-    <!--        <servlet-name>MainServlet</servlet-name>-->
-    <!--        <servlet-class>com.htp.Main</servlet-class>-->
-    <!--    </servlet>-->
-    <!--    <servlet-mapping>-->
-    <!--        <servlet-name>MainServlet</servlet-name>-->
-    <!--        <url-pattern>/**</url-pattern>-->
-    <!--    </servlet-mapping>-->
+    <servlet>
+        <servlet-name>MainServlet</servlet-name>
+        <servlet-class>com.htp.controller.FrontController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MainServlet</servlet-name>
+        <url-pattern>/FrontController</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>HelloWeb</servlet-name>
