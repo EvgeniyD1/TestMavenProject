@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class FrontController extends HttpServlet {
     public FrontController() {
@@ -28,5 +29,13 @@ public class FrontController extends HttpServlet {
             System.out.println("Forward will be done!");
             dispatcher.forward(req, resp);
         }
+//        resp.setContentType("text/html");
+//        PrintWriter out = resp.getWriter();
+//        out.println("<http><head>");
+//        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+//        out.println("<title>Start!</title>");
+//        out.println("</head></body>");
+//        out.println("<h1> Hello, world! </h1>");
+//        out.println("</body></html>");
     }
 }
