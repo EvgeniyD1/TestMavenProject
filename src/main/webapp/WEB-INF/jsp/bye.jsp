@@ -4,11 +4,6 @@
     <title>Bye bye!</title>
 </head>
 <body>
-    <h1>
-        Bye bye!
-        <a href="hello">
-            hello.jsp
-        </a>
-    </h1>
+${userNames}
 </body>
 </html>
