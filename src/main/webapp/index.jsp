@@ -16,5 +16,13 @@
     <form action="bye" method="post">
         <input type="submit" value="Button Bye"/>
     </form>
+    <form action="FrontController" method="get">
+        <input type="hidden" name="command" value="forward"/>
+        Enter login <br/>
+        <input type="text" name="login" value=""/><br/>
+        Enter password <br/>
+        <input type="password" name="password" value=""><br/>
+        <input type="submit" value="Button Send">
+    </form>
 </body>
 </html>

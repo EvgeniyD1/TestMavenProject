@@ -24,11 +24,12 @@ public class FrontController extends HttpServlet {
     }
 
     private void doRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/bye");
-        if (dispatcher != null) {
-            System.out.println("Forward will be done!");
-            dispatcher.forward(req, resp);
-        }
+//        RequestDispatcher dispatcher = req.getRequestDispatcher("/bye");
+//        if (dispatcher != null) {
+//            System.out.println("Forward will be done!");
+//            dispatcher.forward(req, resp);
+//        }
+
 //        resp.setContentType("text/html");
 //        PrintWriter out = resp.getWriter();
 //        out.println("<http><head>");
@@ -37,5 +38,12 @@ public class FrontController extends HttpServlet {
 //        out.println("</head></body>");
 //        out.println("<h1> Hello, world! </h1>");
 //        out.println("</body></html>");
+
+        resp.setContentType("text/html");
+        String login = req.getParameter("login");
+        String password = req.getParameter("password");
+        PrintWriter out = resp.getWriter();
+        out.println("Your login: "+login);
+        out.println("<br/>Your password: "+password);
     }
 }
