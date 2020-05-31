@@ -5,7 +5,7 @@
     <title>Start!</title>
 </head>
 <body>
-.jsp -> .java -> .class -> executing
+Start page
 <p></p>
     <form action="FrontController" method="post">
         <input type="submit" value="Button FrontController"/>
