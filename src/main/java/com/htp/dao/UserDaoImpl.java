@@ -3,6 +3,7 @@ package com.htp.dao;
 import com.htp.domain.User;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import static com.htp.util.DatabaseConfiguration.*;
 import static com.htp.util.DatabaseConfiguration.DATABASE_PASSWORD;
 
+@Component("userDaoImpl")
 public class UserDaoImpl implements UserDao{
 
     public static DatabaseConfiguration config = DatabaseConfiguration.getInstance();
