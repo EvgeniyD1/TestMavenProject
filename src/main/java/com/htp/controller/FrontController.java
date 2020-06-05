@@ -1,10 +1,8 @@
 package com.htp.controller;
 
-import com.htp.dao.BuildingDao;
-import com.htp.dao.BuildingDaoImpl;
-import com.htp.dao.UserDao;
-import com.htp.dao.UserDaoImpl;
+import com.htp.dao.*;
 import com.htp.domain.Building;
+import com.htp.domain.Role;
 import com.htp.domain.User;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,6 +30,7 @@ public class FrontController extends HttpServlet {
 
     private UserDao userDao = new UserDaoImpl();
 //    private BuildingDao buildingDao = new BuildingDaoImpl();
+//    private RoleDAO roleDao = new RoleDaoImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -193,6 +192,64 @@ public class FrontController extends HttpServlet {
 //                    case FIND_ALL:
 //                    default:
 //                        result = buildingDao.findAll().stream().map(Building::getType).collect(Collectors.joining(","));
+//                        break;
+//                }
+//
+//                req.setAttribute("userNames", result);
+//                dispatcher.forward(req, resp);
+//            }
+//        } catch (Exception e) {
+//            RequestDispatcher dispatcher = req.getRequestDispatcher("/error");
+//            req.setAttribute("errors", e.getMessage());
+//            dispatcher.forward(req, resp);
+//        }
+//    }
+
+//    private void doRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String searchQuery = StringUtils.isNotBlank(req.getParameter("roleId")) ? req.getParameter("roleId") : "0";
+//        String typeOfSearch = StringUtils.isNotBlank(req.getParameter("type")) ? req.getParameter("type") : "0";
+//        String roleName = StringUtils.isNotBlank(req.getParameter("roleName")) ? req.getParameter("roleName") : "0";
+//
+//        try {
+//            RequestDispatcher dispatcher = req.getRequestDispatcher("/bye");
+//            if (dispatcher != null) {
+//
+//                String result = "";
+//
+//                switch (typeOfSearch) {
+//                    case FIND_ONE:
+//                        result = roleDao.findOne(Long.parseLong(searchQuery)).getRoleName();
+//                        break;
+//                    case FIND_BY_ID:
+//                        Optional<Role> optionalRole = roleDao.findById(Long.parseLong(searchQuery));
+//                        if (optionalRole.isPresent()) {
+//                            result = optionalRole.get().getRoleName();
+//                        }
+//                        break;
+//                    case SAVE:
+//                        Role role = new Role();
+//                        role.setRoleName(roleName);
+//                        role.setUserId(Long.parseLong(searchQuery));
+//                        result = roleDao.save(role).getRoleName();
+//                        break;
+//                    case UPDATE:
+//                        Role roleForUpdate = roleDao.findOne(Long.parseLong(searchQuery));
+//                        roleForUpdate.setRoleName(roleName);
+//                        result = roleDao.update(roleForUpdate).getRoleName();
+//                        break;
+//                    case DELETE:
+//                        Role roleForDelete = roleDao.findOne(Long.parseLong(searchQuery));
+//                        result = Integer.toString(roleDao.delete(roleForDelete));
+//                        break;
+//                    case BATCH:
+//                        Role roleBatch = new Role();
+//                        roleBatch.setRoleName(roleName);
+//                        roleBatch.setUserId(Long.parseLong(searchQuery));
+//                        result = roleDao.batch(roleBatch).stream().map(Role::getRoleName).collect(Collectors.joining(","));
+//                        break;
+//                    case FIND_ALL:
+//                    default:
+//                        result = roleDao.findAll().stream().map(Role::getRoleName).collect(Collectors.joining(","));
 //                        break;
 //                }
 //
