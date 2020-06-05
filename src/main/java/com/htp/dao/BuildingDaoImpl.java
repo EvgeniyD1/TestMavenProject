@@ -1,7 +1,6 @@
 package com.htp.dao;
 
 import com.htp.domain.Building;
-import com.htp.domain.User;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
 
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.htp.util.DatabaseConfiguration.*;
-import static com.htp.util.DatabaseConfiguration.DATABASE_PASSWORD;
 
 public class BuildingDaoImpl implements BuildingDao {
 

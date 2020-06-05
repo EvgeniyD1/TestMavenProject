@@ -1,8 +1,7 @@
 package com.htp.controller;
 
-import com.htp.dao.*;
-import com.htp.domain.Building;
-import com.htp.domain.Role;
+import com.htp.dao.UserDao;
+import com.htp.dao.UserDaoImpl;
 import com.htp.domain.User;
 import org.apache.commons.lang3.StringUtils;
 
