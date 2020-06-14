@@ -1,8 +1,10 @@
-package com.htp.dao;
+package com.htp.dao.jdbc;
 
+import com.htp.dao.BuildingDao;
 import com.htp.domain.Building;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.Optional;
 
 import static com.htp.util.DatabaseConfiguration.*;
 
+@Repository("buildingRepositoryJdbc")
 public class BuildingDaoImpl implements BuildingDao {
 
     public static DatabaseConfiguration config = DatabaseConfiguration.getInstance();
@@ -248,13 +251,13 @@ public class BuildingDaoImpl implements BuildingDao {
     }
 
     @Override
-    public List<Building> batch(Building building) {
-        final String insertQuery = "insert into m_buildings (type, land_area, rooms_count, total_rooms_area, " +
-                "living_area, kitchen_area, building_floors,floor, building_year, repairs, garage, barn, bath, " +
-                "description, country_location, region_location, town_location,street_location, building_location, " +
-                "room_location)" +
-                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        final String listBuildings = "SELECT * from m_buildings order by id desc limit 2";
+    public List<Building> batchUpdate(List<Building> buildings) {
+        final String updateQuery = "update m_buildings set type = ?, land_area = ?, rooms_count = ?, " +
+                "total_rooms_area = ?, living_area = ?, kitchen_area = ?, building_floors = ?,floor = ?, " +
+                "building_year = ?, repairs = ?, garage = ?, barn = ?, bath = ?, description = ?, " +
+                "country_location = ?, region_location = ?, town_location = ?,street_location = ?, " +
+                "building_location = ?, room_location = ?" +
+                "where id = ?";
         List<Building> resultList = new ArrayList<>();
         try {
             Class.forName(driverName);
@@ -262,11 +265,10 @@ public class BuildingDaoImpl implements BuildingDao {
             System.out.println("Don't worry:)");
         }
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-             PreparedStatement preparedStatementListBuildings = connection.prepareStatement(listBuildings)
+             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
         ) {
             connection.setAutoCommit(false);
-            for (int i = 0; i < 2 ; i++) {
+            for (Building building : buildings) {
                 preparedStatement.setString(1, building.getType());
                 preparedStatement.setInt(2, building.getLandArea());
                 preparedStatement.setInt(3, building.getRoomsCount());
@@ -287,13 +289,10 @@ public class BuildingDaoImpl implements BuildingDao {
                 preparedStatement.setString(18, building.getStreetLocation());
                 preparedStatement.setString(19, building.getBuildingLocation());
                 preparedStatement.setString(20, building.getRoomLocation());
+                preparedStatement.setLong(21, building.getId());
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
-            ResultSet set = preparedStatementListBuildings.executeQuery();
-            while (set.next()) {
-                resultList.add(parseResultSet(set));
-            }
             connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException("Some issues in insert operation!", e);

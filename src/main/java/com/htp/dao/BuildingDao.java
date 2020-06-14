@@ -20,5 +20,5 @@ public interface BuildingDao {
 
     int delete(Building building);
 
-    List<Building> batch(Building building);
+    List<Building> batchUpdate(List<Building> buildings);
 }

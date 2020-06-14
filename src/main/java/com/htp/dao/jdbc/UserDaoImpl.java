@@ -1,9 +1,11 @@
-package com.htp.dao;
+package com.htp.dao.jdbc;
 
+import com.htp.dao.UserDao;
 import com.htp.domain.User;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,8 +15,8 @@ import java.util.Optional;
 import static com.htp.util.DatabaseConfiguration.*;
 import static com.htp.util.DatabaseConfiguration.DATABASE_PASSWORD;
 
-@Component("userDaoImpl")
-public class UserDaoImpl implements UserDao{
+@Repository("userRepositoryJdbc")
+public class UserDaoImpl implements UserDao {
 
     public static DatabaseConfiguration config = DatabaseConfiguration.getInstance();
 
@@ -222,11 +224,10 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public List<User> batch(User user) {
-        final String insertQuery = "insert into m_users (username, surname, patronymic, phone_number, login, " +
-                "password, created, changed, birth_date, is_blocked, mail, country_location)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        final String listUsers = "SELECT * from m_users order by id desc limit 2";
+    public List<User> batchUpdate(List<User> users) {
+        final String updateQuery = "update m_users set username = ?, surname = ?, patronymic = ?, phone_number = ?, login = ?, " +
+                "password = ?, created = ?, changed = ?, birth_date = ?, is_blocked = ?, mail = ?, country_location = ?" +
+                "where id = ?";
         List<User> resultList = new ArrayList<>();
         try {
             Class.forName(driverName);
@@ -234,16 +235,15 @@ public class UserDaoImpl implements UserDao{
             System.out.println("Don't worry:)");
         }
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-             PreparedStatement preparedStatementListUsers = connection.prepareStatement(listUsers)
+             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
         ) {
             connection.setAutoCommit(false);
-            for (int i = 0; i < 2 ; i++) {
+            for (User user : users) {
                 preparedStatement.setString(1, user.getUsername());
                 preparedStatement.setString(2, user.getSurname());
                 preparedStatement.setString(3, user.getPatronymic());
                 preparedStatement.setString(4, user.getPhoneNumber());
-                preparedStatement.setString(5, user.getLogin()+i);
+                preparedStatement.setString(5, user.getLogin());
                 preparedStatement.setString(6, user.getPassword());
                 preparedStatement.setTimestamp(7, user.getCreated());
                 preparedStatement.setTimestamp(8, user.getChanged());
@@ -251,13 +251,10 @@ public class UserDaoImpl implements UserDao{
                 preparedStatement.setBoolean(10, user.isBlocked());
                 preparedStatement.setString(11, user.getMail());
                 preparedStatement.setString(12, user.getCountryLocation());
+                preparedStatement.setLong(13, user.getId());
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
-            ResultSet set = preparedStatementListUsers.executeQuery();
-            while (set.next()) {
-                resultList.add(parseResultSet(set));
-            }
             connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException("Some issues in insert operation!", e);

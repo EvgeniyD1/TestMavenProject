@@ -21,5 +21,5 @@ public interface RoleDAO {
 
     int delete(Role role);
 
-    List<Role> batch(Role role);
+    List<Role> batchUpdate(List<Role> roles);
 }

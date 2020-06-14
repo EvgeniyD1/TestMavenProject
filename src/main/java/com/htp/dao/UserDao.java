@@ -21,5 +21,5 @@ public interface UserDao {
 
     int delete(User user);
 
-    List<User> batch(User user);
+    List<User> batchUpdate(List<User> users);
 }

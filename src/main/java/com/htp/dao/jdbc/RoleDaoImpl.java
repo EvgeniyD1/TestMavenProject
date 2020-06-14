@@ -1,8 +1,10 @@
-package com.htp.dao;
+package com.htp.dao.jdbc;
 
+import com.htp.dao.RoleDAO;
 import com.htp.domain.Role;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Optional;
 import static com.htp.util.DatabaseConfiguration.*;
 import static com.htp.util.DatabaseConfiguration.DATABASE_PASSWORD;
 
+@Repository("roleRepositoryJdbc")
 public class RoleDaoImpl implements RoleDAO {
 
     public static DatabaseConfiguration config = DatabaseConfiguration.getInstance();
@@ -186,10 +189,9 @@ public class RoleDaoImpl implements RoleDAO {
     }
 
     @Override
-    public List<Role> batch(Role role) {
+    public List<Role> batchUpdate(List<Role> roles) {
         /*смысла нет, позже удалить*/
-        final String insertQuery = "insert into m_roles (role_name, user_id) VALUES (?, ?)";
-        final String listRoles = "SELECT * from m_roles order by id desc limit 2";
+        final String updateQuery = "update m_roles set role_name = ?, user_id = ? where id = ?";
         List<Role> resultList = new ArrayList<>();
         try {
             Class.forName(driverName);
@@ -197,20 +199,16 @@ public class RoleDaoImpl implements RoleDAO {
             System.out.println("Don't worry:)");
         }
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-             PreparedStatement preparedStatementListUsers = connection.prepareStatement(listRoles)
+             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)
         ) {
             connection.setAutoCommit(false);
-            for (int i = 0; i < 2 ; i++) {
+            for (Role role : roles) {
                 preparedStatement.setString(1, role.getRoleName());
-                preparedStatement.setLong(2, role.getUserId()+i);
+                preparedStatement.setLong(2, role.getUserId());
+                preparedStatement.setLong(3, role.getId());
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
-            ResultSet set = preparedStatementListUsers.executeQuery();
-            while (set.next()) {
-                resultList.add(parseResultSet(set));
-            }
             connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException("Some issues in insert operation!", e);
