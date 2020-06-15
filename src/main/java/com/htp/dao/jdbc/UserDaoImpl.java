@@ -4,7 +4,6 @@ import com.htp.dao.UserDao;
 import com.htp.domain.User;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;

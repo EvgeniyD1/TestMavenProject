@@ -1,12 +1,11 @@
-package com.htp.dao;
+package com.htp.service;
 
 import com.htp.domain.Role;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface RoleDAO {
-
+public interface RoleService {
     List<Role> findAll();
 
     List<Role> search(String searchParam);

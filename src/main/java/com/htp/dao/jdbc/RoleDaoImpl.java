@@ -1,6 +1,6 @@
 package com.htp.dao.jdbc;
 
-import com.htp.dao.RoleDAO;
+import com.htp.dao.RoleDao;
 import com.htp.domain.Role;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
@@ -15,7 +15,7 @@ import static com.htp.util.DatabaseConfiguration.*;
 import static com.htp.util.DatabaseConfiguration.DATABASE_PASSWORD;
 
 @Repository("roleRepositoryJdbc")
-public class RoleDaoImpl implements RoleDAO {
+public class RoleDaoImpl implements RoleDao {
 
     public static DatabaseConfiguration config = DatabaseConfiguration.getInstance();
     String driverName = config.getProperty(DATABASE_DRIVER_NAME);

@@ -1,11 +1,11 @@
-package com.htp.dao;
+package com.htp.service;
 
 import com.htp.domain.User;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserDao {
+public interface UserService {
     List<User> findAll();
 
     List<User> search(String searchParam);

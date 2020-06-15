@@ -1,8 +1,7 @@
 package com.htp.dao.jdbctemplate;
 
-import com.htp.dao.RoleDAO;
+import com.htp.dao.RoleDao;
 import com.htp.domain.Role;
-import com.htp.domain.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -19,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Repository("roleRepositoryJdbcTemplate")
-public class RoleRepository implements RoleDAO {
+public class RoleRepository implements RoleDao {
 
     public static final String ROLE_ID = "id";
     public static final String ROLE_ROLE_NAME = "role_name";
