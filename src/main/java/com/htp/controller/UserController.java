@@ -1,9 +1,18 @@
 package com.htp.controller;
 
+import com.htp.controller.request.UserRequest;
+import com.htp.domain.User;
 import com.htp.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 
 @Controller
@@ -34,23 +43,31 @@ public class UserController {
         return "user/users";
     }
 
-//    @GetMapping("/save")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public ResponseEntity<User> save(@RequestBody UserRequest userRequest){
-//        User user = new User();
-//        user.setUsername(userRequest.getUsername());
-//        user.setSurname(userRequest.getSurname());
-//        user.setPatronymic(userRequest.getPatronymic());
-//        user.setPhoneNumber(userRequest.getPhoneNumber());
-//        user.setLogin(userRequest.getLogin());
-//        user.setPassword(userRequest.getPassword());
-//        user.setCreated(userRequest.getCreated());
-//        user.setChanged(userRequest.getChanged());
-//        user.setBirthDate(userRequest.getBirthDate());
-//        user.setMail(userRequest.getMail());
-//        user.setCountryLocation(userRequest.getCountryLocation());
-//        userService.save(user);
-//        return new ResponseEntity<>(user,HttpStatus.OK);
-//    }
+    @GetMapping("/addUser")
+    public ModelAndView addUser(){
+        return new ModelAndView("user/userForm","command",new User());
+    }
+
+    @PostMapping("/save")
+    public String saveUser(@ModelAttribute("command") User user, ModelMap modelMap){
+        user.setCreated(new Timestamp(new Date().getTime()));
+        user.setChanged(new Timestamp(new Date().getTime()));
+        modelMap.addAttribute("id", user.getId());
+        modelMap.addAttribute("username", user.getUsername());
+        modelMap.addAttribute("surname", user.getSurname());
+        modelMap.addAttribute("patronymic", user.getPatronymic());
+        modelMap.addAttribute("phoneNumber", user.getPhoneNumber());
+        modelMap.addAttribute("login", user.getLogin());
+        modelMap.addAttribute("password", user.getPassword());
+        modelMap.addAttribute("created", user.getCreated());
+        modelMap.addAttribute("changed", user.getCreated());
+        modelMap.addAttribute("birthDate", user.getBirthDate());
+        modelMap.addAttribute("mail", user.getMail());
+        modelMap.addAttribute("isBlocked", user.isBlocked());
+        modelMap.addAttribute("countryLocation", user.getCountryLocation());
+//        modelMap.addAttribute("user",userService.save(user));
+//        return "user/user";
+        return "user/returnNewUser";
+    }
 
 }
