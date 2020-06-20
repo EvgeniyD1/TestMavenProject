@@ -1,7 +1,10 @@
 package com.htp.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import java.util.Objects;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Building {
     private Long id;
     private String type;

@@ -144,13 +144,12 @@ public class BuildingRepository implements BuildingDao {
     public Building update(Building building) {
         final String updateQuery = "update m_buildings set type = :type, land_area = :land_area, " +
                 "rooms_count = :rooms_count, total_rooms_area = :total_rooms_area, living_area = :living_area, " +
-                "kitchen_area = :kitchen_area, building_floors = :building_floors,floor = :floor, " +
+                "kitchen_area = :kitchen_area, building_floors = :building_floors, floor = :floor, " +
                 "building_year = :building_year, repairs = :repairs, garage = :garage, barn = :barn, " +
                 "bath = :bath, description = :description, country_location = :country_location, " +
                 "region_location = :region_location, town_location = :town_location, " +
                 "street_location = :street_location, building_location = :building_location, " +
-                "room_location = :room_location " +
-                "where id = :buildingId";
+                "room_location = :room_location where id = :buildingId";
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("type",building.getType())
                 .addValue("land_area",building.getLandArea())
@@ -172,7 +171,7 @@ public class BuildingRepository implements BuildingDao {
                 .addValue("street_location",building.getStreetLocation())
                 .addValue("building_location",building.getBuildingLocation())
                 .addValue("room_location",building.getRoomLocation())
-                .addValue(":buildingId",building.getId());
+                .addValue("buildingId",building.getId());
         namedParameterJdbcTemplate.update(updateQuery, parameterSource);
         return findOne(building.getId());
     }
@@ -219,7 +218,7 @@ public class BuildingRepository implements BuildingDao {
                     .addValue("street_location",building.getStreetLocation())
                     .addValue("building_location",building.getBuildingLocation())
                     .addValue("room_location",building.getRoomLocation())
-                    .addValue(":buildingId",building.getId());
+                    .addValue("buildingId",building.getId());
             batch.add(parameterSource);
         }
         namedParameterJdbcTemplate.batchUpdate(updateQuery,batch.toArray(new SqlParameterSource[batch.size()]));

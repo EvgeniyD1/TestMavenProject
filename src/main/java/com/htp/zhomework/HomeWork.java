@@ -7,17 +7,17 @@ public class HomeWork {
 
     private static int newCount;
     private static List<UserUser> firstUser = new ArrayList<>();
-    private static List<UserUser> friendsLvl1 = new ArrayList<>();
-    private static List<UserUser> friendsLvl2 = new ArrayList<>();
-    private static List<UserUser> friendsLvl3 = new ArrayList<>();
-    private static List<UserUser> friendsLvl4 = new ArrayList<>();
 
     private static void userFriends(int count) {
         for (int i = 0; i < 1; i++) {
+            List<UserUser> friendsLvl1 = new ArrayList<>();
             for (int j = 0; j < count; j++) {
-                for (int k = 0; k < count - 1; k++) {
-                    for (int l = 0; l < count - 1; l++) {
-                        for (int m = 0; m < count - 1; m++) {
+                List<UserUser> friendsLvl2 = new ArrayList<>();
+                for (int k = 0; k < count ; k++) {
+                    List<UserUser> friendsLvl3 = new ArrayList<>();
+                    for (int l = 0; l < count; l++) {
+                        List<UserUser> friendsLvl4 = new ArrayList<>();
+                        for (int m = 0; m < count; m++) {
                             UserUser newUserM = new UserUser();
                             newUserM.setId(Integer.toUnsignedLong(newCount));
                             newUserM.setName("name " + newCount);
@@ -71,10 +71,12 @@ public class HomeWork {
     private static void findAllFriends(List<UserUser> userUsers) {
         for (UserUser userUser : userUsers) {
             String name = userUser.getName();
-            System.out.print(" friends = {" + name+", ");
             List<UserUser> friends = userUser.getFriends();
-            if (friends==null){
-                System.out.print("not friends},");
+            System.out.print(" " + name);
+            if (friends!=null){
+                System.out.print(" friends = {");
+            } else {
+                System.out.print(" = { not friends }");
                 continue;
             }
             findAllFriends(friends);
