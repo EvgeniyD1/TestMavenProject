@@ -106,7 +106,7 @@ public class UserRepository implements UserDao {
                 .addValue("birth_date",user.getBirthDate())
                 .addValue("is_blocked",user.isBlocked())
                 .addValue("mail",user.getMail())
-                .addValue("country_location",user.isBlocked());
+                .addValue("country_location",user.getCountryLocation());
         namedParameterJdbcTemplate.update(insertQuery,parameterSource,keyHolder,new String[]{"id"});
         long newUserId = Objects.requireNonNull(keyHolder.getKey()).longValue();
         return findOne(newUserId);
@@ -117,8 +117,7 @@ public class UserRepository implements UserDao {
         final String updateQuery = "update m_users set username = :username, surname = :surname, " +
                 "patronymic = :patronymic, phone_number = :phone_number, login = :login, " +
                 "password = :password, created = :created, changed = :changed, birth_date = :birth_date, " +
-                "is_blocked = :is_blocked, mail = :mail, country_location = :country_location" +
-                "where id = :userId";
+                "is_blocked = :is_blocked, mail = :mail, country_location = :country_location where id = :userId";
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("username",user.getUsername())
                 .addValue("surname",user.getSurname())
@@ -131,7 +130,7 @@ public class UserRepository implements UserDao {
                 .addValue("birth_date",user.getBirthDate())
                 .addValue("is_blocked",user.isBlocked())
                 .addValue("mail",user.getMail())
-                .addValue("country_location",user.isBlocked())
+                .addValue("country_location",user.getCountryLocation())
                 .addValue("userId", user.getId());
         namedParameterJdbcTemplate.update(updateQuery, parameterSource);
         return findOne(user.getId());
@@ -166,7 +165,7 @@ public class UserRepository implements UserDao {
                     .addValue("birth_date",user.getBirthDate())
                     .addValue("is_blocked",user.isBlocked())
                     .addValue("mail",user.getMail())
-                    .addValue("country_location",user.isBlocked())
+                    .addValue("country_location",user.getCountryLocation())
                     .addValue("userId", user.getId());
             batch.add(parameterSource);
         }

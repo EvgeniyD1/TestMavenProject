@@ -1,10 +1,13 @@
 package com.htp.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-public class User {
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+public class User{
     private Long id;
     private String username;
     private String surname;
