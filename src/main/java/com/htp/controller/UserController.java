@@ -3,10 +3,12 @@ package com.htp.controller;
 import com.htp.controller.request.UserRequest;
 import com.htp.domain.User;
 import com.htp.service.UserService;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -22,25 +24,54 @@ public class UserController {
         this.userService = userService;
     }
 
+    @ApiOperation(value = "Finding all users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading users"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
     @GetMapping
     public ResponseEntity<List<User>> findAll() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Finding user by id")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading user"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "User database id", example = "1", required = true,
+                    dataType = "long", paramType = "path")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable("id") Long userId) {
         User user = userService.findOne(userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Search users by login")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading user"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "query", value = "Search query - free text", example = "ED",
+                    required = true, dataType = "string", paramType = "query")
+    })
     @GetMapping("/search")
     public ResponseEntity<List<User>> searchUser(@RequestParam("query") String query) {
         List<User> searchResult = userService.search(query);
         return new ResponseEntity<>(searchResult, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Create user")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successful creation user"),
+            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody UserRequest request) {
+    public ResponseEntity<User> create(@Valid @RequestBody UserRequest request) {
         User userForCreate = new User();
         userForCreate.setUsername(request.getUsername());
         userForCreate.setSurname(request.getSurname());
@@ -57,8 +88,16 @@ public class UserController {
         return new ResponseEntity<>(userService.save(userForCreate), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Update user")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful user update"),
+            @ApiResponse(code = 400, message = "Invalid User ID supplied"),
+            @ApiResponse(code = 404, message = "User was not found"),
+            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId, @RequestBody UserRequest request){
+    public ResponseEntity<User> updateUser(@Valid @PathVariable("id") Long userId, @RequestBody UserRequest request){
         User userForUpdate = userService.findOne(userId);
         userForUpdate.setUsername(request.getUsername());
         userForUpdate.setSurname(request.getSurname());
@@ -74,6 +113,7 @@ public class UserController {
         return new ResponseEntity<>(userService.update(userForUpdate), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Delete user")
     @DeleteMapping("/{id}")
     public ResponseEntity<Integer> deleteUser(@PathVariable("id") Long userId) {
         User userForDelete = userService.findOne(userId);
