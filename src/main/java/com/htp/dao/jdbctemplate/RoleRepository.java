@@ -68,6 +68,14 @@ public class RoleRepository implements RoleDao {
     }
 
     @Override
+    public List<Role> findAllRole(Long userId) {
+        final String findAllRole = "select * from m_roles where user_id = :userId order by role_name";
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("userId", userId);
+        return namedParameterJdbcTemplate.query(findAllRole,parameterSource,this::roleRowMapper);
+    }
+
+    @Override
     public Role save(Role role) {
         final String insertQuery = "insert into m_roles (role_name, user_id) VALUES (:role_name, :userId)";
         KeyHolder keyHolder = new GeneratedKeyHolder();

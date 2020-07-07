@@ -116,6 +116,11 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     @Override
+    public List<Role> findAllRole(Long userId) {
+        return null;
+    }
+
+    @Override
     public Role save(Role role) {
         final String insertQuery = "insert into m_roles (role_name, user_id) VALUES (?, ?)";
         final String lastInsertId = "SELECT currval('m_roles_id_seq') as last_insert_id";

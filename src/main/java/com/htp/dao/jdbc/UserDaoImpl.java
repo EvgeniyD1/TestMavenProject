@@ -90,6 +90,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User findByLogin(String searchParam) {
+        return null;
+    }
+
+    @Override
     public Optional<User> findById(Long userId) {
         return Optional.ofNullable(findOne(userId));
     }

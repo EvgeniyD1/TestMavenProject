@@ -14,6 +14,8 @@ public interface RoleService {
 
     Role findOne(Long roleId);
 
+    List<Role> findAllRole(Long userId);
+
     Role save(Role role);
 
     Role update(Role role);

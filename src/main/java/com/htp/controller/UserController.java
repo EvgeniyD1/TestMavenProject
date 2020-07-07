@@ -2,18 +2,21 @@ package com.htp.controller;
 
 import com.htp.controller.request.UserRequest;
 import com.htp.domain.User;
+import com.htp.security.util.PrincipalUtil;
 import com.htp.service.UserService;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -29,8 +32,16 @@ public class UserController {
             @ApiResponse(code = 200, message = "Successful loading users"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header")
+    })
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<User>> findAll(Principal principal) {
+
+        String username = PrincipalUtil.getUsername(principal);
+        log.info("User with login {} used method findAll", username);
+
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
@@ -40,6 +51,8 @@ public class UserController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "User database id", example = "1", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -49,12 +62,14 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Search users by login")
+    @ApiOperation(value = "Search users by query")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading user"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "query", value = "Search query - free text", example = "ED",
                     required = true, dataType = "string", paramType = "query")
     })
@@ -64,11 +79,32 @@ public class UserController {
         return new ResponseEntity<>(searchResult, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Search user by login")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading user"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
+            @ApiImplicitParam(name = "query", value = "Search query - Login", example = "ED",
+                    required = true, dataType = "string", paramType = "query")
+    })
+    @GetMapping("/searchByLogin")
+    public ResponseEntity<User> findByLogin(@RequestParam("query") String query) {
+        User byLogin = userService.findByLogin(query);
+        return new ResponseEntity<>(byLogin, HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Create user")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Successful creation user"),
             @ApiResponse(code = 422, message = "Failed user creation properties validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header")
     })
     @PostMapping
     public ResponseEntity<User> create(@Valid @RequestBody UserRequest request) {
@@ -96,6 +132,10 @@ public class UserController {
             @ApiResponse(code = 422, message = "Failed user creation properties validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@Valid @PathVariable("id") Long userId, @RequestBody UserRequest request){
         User userForUpdate = userService.findOne(userId);
@@ -114,6 +154,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "Delete user")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Integer> deleteUser(@PathVariable("id") Long userId) {
         User userForDelete = userService.findOne(userId);

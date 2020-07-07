@@ -75,6 +75,14 @@ public class UserRepository implements UserDao {
     }
 
     @Override
+    public User findByLogin(String searchParam) {
+        final String findByLogin = "select * from m_users where login = :login";
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("login", searchParam);
+        return namedParameterJdbcTemplate.queryForObject(findByLogin,parameterSource,this::userRowMapper);
+    }
+
+    @Override
     public Optional<User> findById(Long userId) {
         return Optional.ofNullable(findOne(userId));
     }

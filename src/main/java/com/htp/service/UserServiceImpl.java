@@ -28,6 +28,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User findByLogin(String searchParam) {
+        return userDao.findByLogin(searchParam);
+    }
+
+    @Override
     public Optional<User> findById(Long userId) {
         return userDao.findById(userId);
     }

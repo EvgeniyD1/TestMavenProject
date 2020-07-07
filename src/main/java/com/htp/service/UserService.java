@@ -10,6 +10,8 @@ public interface UserService {
 
     List<User> search(String searchParam);
 
+    User findByLogin(String searchParam);
+
     Optional<User> findById(Long userId);
 
     User findOne(Long userId);
