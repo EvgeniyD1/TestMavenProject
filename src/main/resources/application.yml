@@ -6,6 +6,18 @@ spring:
     password: root
     hikari:
       maximum-pool-size: 10
+  jpa:
+    properties:
+      javax.persistence.validation.mode: none
+      hibernate.dialect: org.hibernate.dialect.PostgreSQL10Dialect
+      hibernate.show_sql: true
+      hibernate.connection.characterEncoding: utf8mb4
+      hibernate.connection.CharSet: utf8mb4
+      hibernate.connection.useUnicode: true
+#      hibernate.jdbc.batch_size: 5
+#      hibernate.order_inserts: true
+#      hibernate.order_updates: true
+#      hibernate.batch_versioned_data: true
 ---
 jwttoken:
   secret: secret
