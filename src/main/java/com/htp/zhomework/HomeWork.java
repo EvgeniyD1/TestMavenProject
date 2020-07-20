@@ -6,98 +6,93 @@ import java.util.List;
 public class HomeWork {
 
     private static int newCount;
-    private static List<UserUser> firstUser = new ArrayList<>();
 
-    private static void userFriends(int count) {
-        for (int i = 0; i < 1; i++) {
-            List<UserUser> friendsLvl1 = new ArrayList<>();
-            for (int j = 0; j < count; j++) {
-                List<UserUser> friendsLvl2 = new ArrayList<>();
-                for (int k = 0; k < count ; k++) {
-                    List<UserUser> friendsLvl3 = new ArrayList<>();
-                    for (int l = 0; l < count; l++) {
-                        List<UserUser> friendsLvl4 = new ArrayList<>();
-                        for (int m = 0; m < count; m++) {
-                            UserUser newUserM = new UserUser();
-                            newUserM.setId(Integer.toUnsignedLong(newCount));
-                            newUserM.setName("name " + newCount);
-                            newUserM.setSurname("surname " + newCount);
-                            newUserM.setFriends(null);
-                            friendsLvl4.add(newUserM);
-                            newCount++;
-                        }
-                        UserUser newUserL = new UserUser();
-                        newUserL.setId(Integer.toUnsignedLong(newCount));
-                        newUserL.setName("name " + newCount);
-                        newUserL.setSurname("surname " + newCount);
-                        newUserL.setFriends(friendsLvl4);
-                        friendsLvl3.add(newUserL);
-                        newCount++;
-                    }
-                    UserUser newUserK = new UserUser();
-                    newUserK.setId(Integer.toUnsignedLong(newCount));
-                    newUserK.setName("name " + newCount);
-                    newUserK.setSurname("surname " + newCount);
-                    newUserK.setFriends(friendsLvl3);
-                    friendsLvl2.add(newUserK);
-                    newCount++;
-                }
-                UserUser newUserJ = new UserUser();
-                newUserJ.setId(Integer.toUnsignedLong(newCount));
-                newUserJ.setName("name " + newCount);
-                newUserJ.setSurname("surname " + newCount);
-                newUserJ.setFriends(friendsLvl2);
-                friendsLvl1.add(newUserJ);
-                newCount++;
-            }
-            UserUser newUserI = new UserUser();
-            newUserI.setId(Integer.toUnsignedLong(newCount));
-            newUserI.setName("name " + newCount);
-            newUserI.setSurname("surname " + newCount);
-            newUserI.setFriends(friendsLvl1);
-            firstUser.add(newUserI);
+    private static List<UserUser> userGenerator(int count) {
+        UserUser userUser;
+        List<UserUser> users = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
             newCount++;
+            userUser = UserUser.builder()
+                    .id(Integer.toUnsignedLong(newCount))
+                    .name("name " + newCount)
+                    .surname("surname " + newCount)
+                    .build();
+            users.add(userUser);
         }
+        return users;
     }
+
+    private static List<UserUser> userGenerator2(int count) {
+        UserUser userUser;
+        List<UserUser> users = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            newCount++;
+            userUser = UserUser.builder()
+                    .id(Integer.toUnsignedLong(newCount))
+                    .name("name " + newCount)
+                    .surname("surname " + newCount)
+                    .friends(userGenerator(count))
+                    .build();
+            users.add(userUser);
+        }
+        return users;
+    }
+
+    private static List<UserUser> userGenerator3(int count) {
+        UserUser userUser;
+        List<UserUser> users = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            newCount++;
+            userUser = UserUser.builder()
+                    .id(Integer.toUnsignedLong(newCount))
+                    .name("name " + newCount)
+                    .surname("surname " + newCount)
+                    .friends(userGenerator2(count))
+                    .build();
+            users.add(userUser);
+        }
+        return users;
+    }
+
+    private static List<UserUser> userGenerator4(int count) {
+        UserUser userUser;
+        List<UserUser> users = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            newCount++;
+            userUser = UserUser.builder()
+                    .id(Integer.toUnsignedLong(newCount))
+                    .name("name " + newCount)
+                    .surname("surname " + newCount)
+                    .friends(userGenerator3(count))
+                    .build();
+            users.add(userUser);
+        }
+        return users;
+    }
+
 
     public static void main(String[] args) {
-        userFriends(2);
-        for (UserUser userUser : firstUser) {
-            System.out.println(userUser);
-        }
-        findAllFriends(firstUser);
+        findAllFriends2(userGenerator4(2),1);
     }
 
-    private static void findAllFriends(List<UserUser> userUsers) {
+    private static void findAllFriends2(List<UserUser> userUsers, int lvl) {
         for (UserUser userUser : userUsers) {
             String name = userUser.getName();
             List<UserUser> friends = userUser.getFriends();
             System.out.print(" " + name);
-            if (friends!=null){
+            if (lvl!=0 && friends != null) {
                 System.out.print(" friends = {");
+                System.out.println();
             } else {
-                System.out.print(" = { not friends }");
+                System.out.print(" = { end lvl }");
                 continue;
             }
-            findAllFriends(friends);
+            findAllFriends2(friends, --lvl);
             System.out.print("}");
+            System.out.println();
+            ++lvl;
         }
     }
-
-
-//    private static void userFriendsRec(int count){
-//        List<UserUser> userFriendRec = new ArrayList<>();
-//        List<UserUser> userFriendRec2 = new ArrayList<>();
-//        UserUser newUser = new UserUser();
-//        newUser.setId(Integer.toUnsignedLong(count));
-//        newUser.setName("name "+count);
-//        newUser.setSurname("surname "+count);
-//        newUser.setFriends(userFriendRec);
-//        userFriendRec2.add(newUser);
-//        if (count!=1){
-//            userFriendsRec(count-1);
-//        }
-//    }
 
 
 }

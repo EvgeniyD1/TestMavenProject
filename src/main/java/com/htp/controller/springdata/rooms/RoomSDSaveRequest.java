@@ -1,4 +1,4 @@
-package com.htp.controller.hibernate.request;
+package com.htp.controller.springdata.rooms;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import io.swagger.annotations.ApiModel;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @ApiModel(description = "Room creation model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class RoomSaveRequest {
+public class RoomSDSaveRequest {
 
     @ApiModelProperty(required = true, dataType = "long", notes = "Building ID")
     private Long buildingId;

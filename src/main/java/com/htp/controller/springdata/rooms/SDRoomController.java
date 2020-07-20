@@ -1,47 +1,45 @@
-package com.htp.controller.hibernate.controller;
+package com.htp.controller.springdata.rooms;
 
 import com.htp.controller.hibernate.request.RoomSaveRequest;
+import com.htp.dao.springdata.BuildingSDRepository;
+import com.htp.dao.springdata.RoomSDRepository;
+import com.htp.domain.hibernate.HibernateBuilding;
 import com.htp.domain.hibernate.HibernateRoom;
-import com.htp.service.hibernate.HibernateBuildingService;
-import com.htp.service.hibernate.HibernateRoomService;
+import com.htp.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @Transactional
-@RequestMapping("/hibernateRooms")
-public class HibernateRoomController {
+@RequestMapping("/sd/rooms")
+public class SDRoomController {
 
-    private HibernateRoomService hibernateRoomService;
-    private HibernateBuildingService  hibernateBuildingService;
+    private RoomSDRepository repository;
+    private BuildingSDRepository buildingSDRepository;
 
-    public HibernateRoomController(HibernateRoomService hibernateRoomService,
-                                   HibernateBuildingService hibernateBuildingService) {
-        this.hibernateRoomService = hibernateRoomService;
-        this.hibernateBuildingService = hibernateBuildingService;
+    public SDRoomController(RoomSDRepository repository, BuildingSDRepository buildingSDRepository) {
+        this.repository = repository;
+        this.buildingSDRepository = buildingSDRepository;
     }
+
 
     @ApiOperation(value = "Finding all Rooms")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading Rooms"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header")
-//    })
     @GetMapping
     public ResponseEntity<List<HibernateRoom>> findAll() {
-        return new ResponseEntity<>(hibernateRoomService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
 
@@ -51,19 +49,13 @@ public class HibernateRoomController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
             @ApiImplicitParam(name = "buildingId", value = "BuildingId database ID", example = "1", required = true,
                     dataType = "long", paramType = "path")
     })
     @GetMapping("/building/{buildingId}")
     public ResponseEntity<List<HibernateRoom>> findAllRoomsInBuilding(@PathVariable("buildingId") Long buildingId) {
-        List<HibernateRoom> allRoomsInBuilding = hibernateRoomService.findAllRoomsInBuilding(buildingId);
-        if (allRoomsInBuilding.isEmpty()) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Rooms in Building with id = " + buildingId +
-                    " not found");
-        }
-        return new ResponseEntity<>(allRoomsInBuilding, HttpStatus.OK);
+        List<HibernateRoom> rooms = repository.findAllRoomByBuildingId(buildingId);
+        return new ResponseEntity<>(rooms, HttpStatus.OK);
     }
 
 
@@ -73,17 +65,13 @@ public class HibernateRoomController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Role database id", example = "1", required = true,
                     dataType = "long", paramType = "path")
     })
     @GetMapping("/{id}")
     public ResponseEntity<HibernateRoom> findById(@PathVariable("id") Long roomId) {
-        HibernateRoom room = hibernateRoomService.findOne(roomId);
-        if (room == null) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Room with id = " + roomId + " not found");
-        }
+        Optional<HibernateRoom> roomOptional = repository.findById(roomId);
+        HibernateRoom room = roomOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
 
@@ -100,12 +88,15 @@ public class HibernateRoomController {
 //    })
     @PostMapping
     public ResponseEntity<HibernateRoom> create(@Valid @RequestBody RoomSaveRequest request) {
+        Optional<HibernateBuilding> buildingOptional = buildingSDRepository.findById(request.getBuildingId());
+        HibernateBuilding building = buildingOptional.orElseThrow(() ->
+                new ResourceNotFoundException("Resource Not Found"));
         HibernateRoom room = HibernateRoom.builder()
-                .building(hibernateBuildingService.findOne(request.getBuildingId()))
+                .building(building)
                 .roomArea(request.getRoomArea())
                 .description(request.getDescription())
                 .build();
-        return new ResponseEntity<>(hibernateRoomService.save(room), HttpStatus.OK);
+        return new ResponseEntity<>(repository.save(room), HttpStatus.OK);
     }
 
 
@@ -120,16 +111,17 @@ public class HibernateRoomController {
     @ApiImplicitParams({
 //            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
 //                    paramType = "header"),
-            @ApiImplicitParam(name = "id", value = "Room database ID", example = "8", required = true,
-                    dataType = "long", paramType = "path")
+            @ApiImplicitParam(name = "id", value = "Room database ID (buildingId not use)",
+                    example = "8", required = true, dataType = "long", paramType = "path")
     })
     @PutMapping("/{id}")
     public ResponseEntity<HibernateRoom> update(@Valid @PathVariable("id") Long roomId,
                                                 @RequestBody RoomSaveRequest request) {
-        HibernateRoom room = hibernateRoomService.findOne(roomId);
+        Optional<HibernateRoom> roomOptional = repository.findById(roomId);
+        HibernateRoom room = roomOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         room.setRoomArea(request.getRoomArea());
         room.setDescription(request.getDescription());
-        return new ResponseEntity<>(hibernateRoomService.update(room), HttpStatus.OK);
+        return new ResponseEntity<>(repository.save(room), HttpStatus.OK);
     }
 
 
@@ -141,9 +133,10 @@ public class HibernateRoomController {
                     dataType = "long", paramType = "path")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRole(@PathVariable("id") Long roomID) {
-        HibernateRoom roomForDelete = hibernateRoomService.findOne(roomID);
-        hibernateRoomService.delete(roomForDelete);
+    public ResponseEntity<String> deleteRoom(@PathVariable("id") Long roomID) {
+        Optional<HibernateRoom> roomOptional = repository.findById(roomID);
+        HibernateRoom room = roomOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        repository.delete(room);
         String delete = "Room with ID = " + roomID + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }

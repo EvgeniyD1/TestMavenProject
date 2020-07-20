@@ -1,47 +1,44 @@
-package com.htp.controller.hibernate.controller;
+package com.htp.controller.springdata.roles;
 
-import com.htp.controller.hibernate.request.HibernateRoleRequest;
+import com.htp.dao.springdata.RoleSDRepository;
+import com.htp.dao.springdata.UserSDRepository;
 import com.htp.domain.hibernate.HibernateRole;
-import com.htp.service.hibernate.HibernateRoleService;
-import com.htp.service.hibernate.HibernateUserService;
+import com.htp.domain.hibernate.HibernateUser;
+import com.htp.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @Transactional
-@RequestMapping("/hibernateRoles")
-public class HibernateRoleController {
+@RequestMapping("/sd/roles")
+public class SDRoleController {
 
-    private final HibernateRoleService hibernateRoleService;
-    private final HibernateUserService hibernateUserService;
+    private RoleSDRepository repository;
+    private UserSDRepository userSDRepository;
 
-    public HibernateRoleController(HibernateRoleService hibernateRoleService,
-                                   HibernateUserService hibernateUserService) {
-        this.hibernateRoleService = hibernateRoleService;
-        this.hibernateUserService = hibernateUserService;
+    public SDRoleController(RoleSDRepository repository, UserSDRepository userSDRepository) {
+        this.repository = repository;
+        this.userSDRepository = userSDRepository;
     }
+
 
     @ApiOperation(value = "Finding all Roles")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading Roles"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header")
-//    })
     @GetMapping
     public ResponseEntity<List<HibernateRole>> findAll() {
-        return new ResponseEntity<>(hibernateRoleService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
 
@@ -51,18 +48,14 @@ public class HibernateRoleController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Role database id", example = "1", required = true,
                     dataType = "long", paramType = "path")
     })
     @GetMapping("/{id}")
     public ResponseEntity<HibernateRole> findById(@PathVariable("id") Long roleId) {
-        HibernateRole role = hibernateRoleService.findOne(roleId);
-        if (role == null) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Role with id = " + roleId + " not found");
-        }
-        return new ResponseEntity<>(role, HttpStatus.OK);
+        Optional<HibernateRole> role = repository.findById(roleId);
+        HibernateRole hibernateRole = role.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        return new ResponseEntity<>(hibernateRole, HttpStatus.OK);
     }
 
 
@@ -72,17 +65,12 @@ public class HibernateRoleController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
             @ApiImplicitParam(name = "userId", value = "User database id", example = "2", required = true,
                     dataType = "long", paramType = "path")
     })
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<HibernateRole>> findAllUserRoles(@PathVariable("userId") Long userId) {
-        List<HibernateRole> roles = hibernateRoleService.findAllUserRoles(userId);
-        if (roles.isEmpty()) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Roles with userId = " + userId + " not found");
-        }
+        List<HibernateRole> roles = repository.findAllRolesByUserId(userId);
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
@@ -98,12 +86,14 @@ public class HibernateRoleController {
 //                    paramType = "header")
 //    })
     @PostMapping
-    public ResponseEntity<HibernateRole> create(@Valid @RequestBody HibernateRoleRequest request) {
+    public ResponseEntity<HibernateRole> create(@Valid @RequestBody RoleSDSaveRequest request) {
+        Optional<HibernateUser> userOptional = userSDRepository.findById(request.getUserId());
+        HibernateUser user = userOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         HibernateRole role = HibernateRole.builder()
                 .roleName(request.getRoleName())
-                .user(hibernateUserService.findOne(request.getUserId()))
+                .user(user)
                 .build();
-        return new ResponseEntity<>(hibernateRoleService.save(role), HttpStatus.OK);
+        return new ResponseEntity<>(repository.save(role), HttpStatus.OK);
     }
 
 
@@ -111,26 +101,30 @@ public class HibernateRoleController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful Role update"),
             @ApiResponse(code = 400, message = "Invalid Role ID supplied"),
-            @ApiResponse(code = 404, message = "Role was not found"),
-            @ApiResponse(code = 422, message = "Failed Role creation properties validation"),
+            @ApiResponse(code = 422, message = "Failed validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
 //            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
 //                    paramType = "header"),
-            @ApiImplicitParam(name = "id", value = "Role database id", example = "8", required = true,
+            @ApiImplicitParam(name = "id", value = "Role database id (userId not use)", example = "8", required = true,
                     dataType = "long", paramType = "path")
     })
     @PutMapping("/{id}")
     public ResponseEntity<HibernateRole> update(@Valid @PathVariable("id") Long roleId,
-                                                @RequestBody HibernateRoleRequest request) {
-        HibernateRole role = hibernateRoleService.findOne(roleId);
+                                                @RequestBody RoleSDSaveRequest request) {
+        Optional<HibernateRole> roleOptional = repository.findById(roleId);
+        HibernateRole role = roleOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         role.setRoleName(request.getRoleName());
-        return new ResponseEntity<>(hibernateRoleService.update(role), HttpStatus.OK);
+        return new ResponseEntity<>(repository.save(role), HttpStatus.OK);
     }
 
 
     @ApiOperation(value = "Delete Role")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful delete user"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
     @ApiImplicitParams({
 //            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
 //                    paramType = "header"),
@@ -139,8 +133,9 @@ public class HibernateRoleController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRole(@PathVariable("id") Long roleId) {
-        HibernateRole roleForDelete = hibernateRoleService.findOne(roleId);
-        hibernateRoleService.delete(roleForDelete);
+        Optional<HibernateRole> roleOptional = repository.findById(roleId);
+        HibernateRole role = roleOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        repository.delete(role);
         String delete = "Role with ID = " + roleId + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }

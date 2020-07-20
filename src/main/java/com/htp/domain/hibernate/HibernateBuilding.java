@@ -4,23 +4,23 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Collections;
-import java.util.List;
+import java.io.Serializable;
+import java.util.Set;
 
 @Setter
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "rooms"
+        "rooms", "rent", "sale"
 })
 @ToString(exclude = {
-        "rooms"
+        "rooms", "rent", "sale"
 })
 @Builder
 @Entity
 @Table(name = "m_buildings")
-public class HibernateBuilding {
+public class HibernateBuilding implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,5 +88,15 @@ public class HibernateBuilding {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<HibernateRoom> rooms = Collections.emptyList();
+    private Set<HibernateRoom> rooms;
+
+    @JsonManagedReference
+//    @JsonIgnoreProperties("building")
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<HibernateRent> rent;
+
+    @JsonManagedReference
+//    @JsonIgnoreProperties("building")
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<HibernateSale> sale;
 }

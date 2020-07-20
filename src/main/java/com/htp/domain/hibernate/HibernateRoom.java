@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Setter
 @Getter
@@ -18,7 +19,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "m_rooms")
-public class HibernateRoom {
+public class HibernateRoom implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

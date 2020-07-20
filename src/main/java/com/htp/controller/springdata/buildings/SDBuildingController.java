@@ -1,29 +1,30 @@
-package com.htp.controller.hibernate.controller;
+package com.htp.controller.springdata.buildings;
 
 import com.htp.controller.hibernate.request.BuildingSaveRequest;
+import com.htp.dao.springdata.BuildingSDRepository;
 import com.htp.domain.hibernate.HibernateBuilding;
-import com.htp.service.hibernate.HibernateBuildingService;
+import com.htp.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @Transactional
-@RequestMapping("/hibernateBuildings")
-public class HibernateBuildingController {
+@RequestMapping("/sd/buildings")
+public class SDBuildingController {
 
-    private HibernateBuildingService hibernateBuildingService;
+    private BuildingSDRepository repository;
 
-    public HibernateBuildingController(HibernateBuildingService hibernateBuildingService) {
-        this.hibernateBuildingService = hibernateBuildingService;
+    public SDBuildingController(BuildingSDRepository repository) {
+        this.repository = repository;
     }
 
 
@@ -32,13 +33,9 @@ public class HibernateBuildingController {
             @ApiResponse(code = 200, message = "Successful loading Buildings"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header")
-//    })
     @GetMapping
     public ResponseEntity<List<HibernateBuilding>> findAll() {
-        return new ResponseEntity<>(hibernateBuildingService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
 
@@ -48,46 +45,14 @@ public class HibernateBuildingController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Building database id", example = "2", required = true,
                     dataType = "long", paramType = "path")
     })
     @GetMapping("/{id}")
     public ResponseEntity<HibernateBuilding> findById(@PathVariable("id") Long buildingId) {
-        HibernateBuilding building = hibernateBuildingService.findOne(buildingId);
-        if (building == null) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Building with ID = " + buildingId + " not found");
-        }
-        return new ResponseEntity<>(building, HttpStatus.OK);
-    }
-
-
-    @ApiOperation(value = "Search users by Country, Town and Street")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Successful loading Building"),
-            @ApiResponse(code = 500, message = "Server error, something wrong")
-    })
-    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
-            @ApiImplicitParam(name = "country", value = "Search query - country", example = "Belarus",
-                    required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "town", value = "Search query - town, if empty then 0",
-                    example = "Minsk", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "street", value = "Search query - street, if empty then 0",
-                    example = "Komsomolskaya", required = true, dataType = "string", paramType = "query")
-    })
-    @GetMapping("/searchLocation")
-    public ResponseEntity<List<HibernateBuilding>> searchLocation(@RequestParam("country") String country,
-                                                                  @RequestParam("town") String town,
-                                                                  @RequestParam("street") String street) {
-        List<HibernateBuilding> buildings = hibernateBuildingService.searchLocation(country, town, street);
-        if (buildings.isEmpty()) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Buildings with country '" + country
-                    + "' , town '" + town + "' and street '" + street + "' not found");
-        }
-        return new ResponseEntity<>(buildings, HttpStatus.OK);
+        Optional<HibernateBuilding> building = repository.findById(buildingId);
+        HibernateBuilding hibBuilding = building.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        return new ResponseEntity<>(hibBuilding, HttpStatus.OK);
     }
 
 
@@ -97,14 +62,12 @@ public class HibernateBuildingController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
             @ApiImplicitParam(name = "type", value = "Search query - type", example = "house",
                     required = true, dataType = "string", paramType = "query")
     })
     @GetMapping("/searchType")
-    public ResponseEntity<List<HibernateBuilding>> searchType(@RequestParam("type") String query) {
-        List<HibernateBuilding> buildings = hibernateBuildingService.searchType(query);
+    public ResponseEntity<List<HibernateBuilding>> searchType(@RequestParam("type") String type) {
+        List<HibernateBuilding> buildings = repository.findByType(type);
         return new ResponseEntity<>(buildings, HttpStatus.OK);
     }
 
@@ -143,7 +106,7 @@ public class HibernateBuildingController {
                 .buildingLocation(request.getBuildingLocation())
                 .roomLocation(request.getRoomLocation())
                 .build();
-        return new ResponseEntity<>(hibernateBuildingService.save(building), HttpStatus.CREATED);
+        return new ResponseEntity<>(repository.save(building), HttpStatus.CREATED);
     }
 
 
@@ -151,8 +114,7 @@ public class HibernateBuildingController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful Building update"),
             @ApiResponse(code = 400, message = "Invalid Building ID supplied"),
-            @ApiResponse(code = 404, message = "Building was not found"),
-            @ApiResponse(code = 422, message = "Failed Building creation properties validation"),
+            @ApiResponse(code = 422, message = "Failed validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
@@ -164,7 +126,9 @@ public class HibernateBuildingController {
     @PutMapping("/{id}")
     public ResponseEntity<HibernateBuilding> update(@Valid @PathVariable("id") Long buildingId,
                                                     @RequestBody BuildingSaveRequest request) {
-        HibernateBuilding building = hibernateBuildingService.findOne(buildingId);
+        Optional<HibernateBuilding> buildingOptional = repository.findById(buildingId);
+        HibernateBuilding building = buildingOptional.orElseThrow(() ->
+                new ResourceNotFoundException("Resource Not Found"));
         building.setType(request.getType());
         building.setLandArea(request.getLandArea());
         building.setRoomsCount(request.getRoomsCount());
@@ -185,11 +149,11 @@ public class HibernateBuildingController {
         building.setStreetLocation(request.getStreetLocation());
         building.setBuildingLocation(request.getBuildingLocation());
         building.setRoomLocation(request.getRoomLocation());
-        return new ResponseEntity<>(hibernateBuildingService.update(building), HttpStatus.OK);
+        return new ResponseEntity<>(repository.save(building), HttpStatus.OK);
     }
 
 
-    @ApiOperation(value = "Delete user")
+    @ApiOperation(value = "Delete Building")
     @ApiImplicitParams({
 //            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
 //                    paramType = "header"),
@@ -198,9 +162,11 @@ public class HibernateBuildingController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long buildingId) {
-        HibernateBuilding buildingForDelete = hibernateBuildingService.findOne(buildingId);
-        long db = hibernateBuildingService.delete(buildingForDelete);
-        String delete = "Building with ID = " + db + " deleted";
+        Optional<HibernateBuilding> buildingOptional = repository.findById(buildingId);
+        HibernateBuilding building = buildingOptional.orElseThrow(() ->
+                new ResourceNotFoundException("Resource Not Found"));
+        repository.delete(building);
+        String delete = "Building with ID = " + building.getId() + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }
 }

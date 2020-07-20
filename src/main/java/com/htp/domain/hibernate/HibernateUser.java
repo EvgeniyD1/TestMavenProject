@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 
@@ -15,15 +14,16 @@ import java.util.Set;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "roles"
+        "roles", "rent", "sale"
 })
 @ToString(exclude = {
-        "roles"
+        "roles", "rent", "sale"
 })
 @Builder
 @Entity
 @Table(name = "m_users")
 //@DynamicUpdate
+//@Document(indexName = "user")
 public class HibernateUser implements Serializable {
 
     @Id
@@ -55,6 +55,7 @@ public class HibernateUser implements Serializable {
     private Timestamp changed;
 
     @Column(name = "birth_date")
+    @Temporal(TemporalType.DATE)
     private Date birthDate;
 
     @Column(name = "is_blocked")
@@ -68,6 +69,15 @@ public class HibernateUser implements Serializable {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<HibernateRole> roles = Collections.emptySet();
+    private Set<HibernateRole> roles;
 
+    @JsonManagedReference
+//    @JsonIgnoreProperties("user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<HibernateRent> rent;
+
+    @JsonManagedReference
+//    @JsonIgnoreProperties("user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<HibernateSale> sale;
 }

@@ -1,4 +1,4 @@
-package com.htp.controller.hibernate.request;
+package com.htp.controller.springdata.buildings;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import io.swagger.annotations.ApiModel;
@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @Builder
 @ApiModel(description = "Building creation model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class BuildingSaveRequest {
+public class BuildingSDSaveRequest {
 
     @NotNull
     @NotEmpty
