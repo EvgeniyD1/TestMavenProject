@@ -1,4 +1,4 @@
-package com.htp.controller.springdata.users;
+package com.htp.controller.springdata.buildings;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,15 +13,11 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@ApiModel(description = "User update model")
+@ApiModel(description = "Building update model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class UserSDUpdateRequest  extends UserSDSaveRequest{
+public class BuildingSDUpdateRequest extends BuildingSDSaveRequest{
 
     @JsonIgnore
-    @ApiModelProperty(dataType = "long", notes = "user database id", required = true)
+    @ApiModelProperty(dataType = "long", notes = "Building database id", required = true)
     private Long id;
-
-    @ApiModelProperty(dataType = "boolean", notes = "user is blocked")
-    private boolean isBlocked;
-
 }

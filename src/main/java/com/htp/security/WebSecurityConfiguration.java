@@ -75,6 +75,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/sd/rooms/**").permitAll()
                 .antMatchers("/sd/rent/**").permitAll()
                 .antMatchers("/sd/sale/**").permitAll()
+                .antMatchers("/sd/test/**").permitAll()
+//                .antMatchers("/sd/**").permitAll()
 //                .antMatchers("/users/**").permitAll()
                 .antMatchers("/users/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()

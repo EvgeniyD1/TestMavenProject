@@ -112,16 +112,16 @@ create table m_rent
 	currency varchar(20) not null
 );
 
-alter table m_rent owner to testuser;
+alter table m_real_estate_activities owner to testuser;
 
 create index m_rent_1_building_id_index
-	on m_rent (building_id);
+	on m_real_estate_activities (building_id);
 
 create unique index m_rent_1_id_uindex
-	on m_rent (id);
+	on m_real_estate_activities (id);
 
 create index m_rent_1_user_id_index
-	on m_rent (user_id);
+	on m_real_estate_activities (user_id);
 
 create table m_sale
 (

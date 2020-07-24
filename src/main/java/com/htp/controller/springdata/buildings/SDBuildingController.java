@@ -1,18 +1,25 @@
 package com.htp.controller.springdata.buildings;
 
-import com.htp.controller.hibernate.request.BuildingSaveRequest;
 import com.htp.dao.springdata.BuildingSDRepository;
+import com.htp.dao.springdata.UserSDRepository;
 import com.htp.domain.hibernate.HibernateBuilding;
+import com.htp.domain.hibernate.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -21,25 +28,38 @@ import java.util.Optional;
 @RequestMapping("/sd/buildings")
 public class SDBuildingController {
 
-    private BuildingSDRepository repository;
+    private final BuildingSDRepository repository;
+    private final ConversionService conversionService;
+    private final UserSDRepository userSDRepository;
 
-    public SDBuildingController(BuildingSDRepository repository) {
+    public SDBuildingController(BuildingSDRepository repository,
+                                ConversionService conversionService,
+                                UserSDRepository userSDRepository) {
         this.repository = repository;
+        this.conversionService = conversionService;
+        this.userSDRepository = userSDRepository;
     }
-
 
     @ApiOperation(value = "Finding all Buildings")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading Buildings"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "Page number",
+                    example = "0", defaultValue = "0", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "Items per page",
+                    example = "3", defaultValue = "3", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "sort", value = "Field to sort",
+                    example = "id", defaultValue = "id", dataType = "string", paramType = "query")
+    })
     @GetMapping
-    public ResponseEntity<List<HibernateBuilding>> findAll() {
-        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
+    public ResponseEntity<Page<HibernateBuilding>> findAll(@ApiIgnore Pageable pageable) {
+        return new ResponseEntity<>(repository.findAll(pageable), HttpStatus.OK);
     }
 
 
-    @ApiOperation(value = "Finding Building by ID")
+    @ApiOperation(value = "Find Building by ID")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading Building"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
@@ -78,35 +98,18 @@ public class SDBuildingController {
             @ApiResponse(code = 422, message = "Failed Building creation properties validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header")
-//    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header")
+    })
     @PostMapping
-    public ResponseEntity<HibernateBuilding> create(@Valid @RequestBody BuildingSaveRequest request) {
-        HibernateBuilding building = HibernateBuilding.builder()
-                .type(request.getType())
-                .landArea(request.getLandArea())
-                .roomsCount(request.getRoomsCount())
-                .totalRoomsArea(request.getLivingArea())
-                .livingArea(request.getLivingArea())
-                .kitchenArea(request.getKitchenArea())
-                .buildingFloors(request.getBuildingFloors())
-                .floor(request.getFloor())
-                .buildingYear(request.getBuildingYear())
-                .repairs(request.isRepairs())
-                .garage(request.isGarage())
-                .barn(request.isBarn())
-                .bath(request.isBath())
-                .description(request.getDescription())
-                .countryLocation(request.getCountryLocation())
-                .regionLocation(request.getRegionLocation())
-                .townLocation(request.getTownLocation())
-                .streetLocation(request.getStreetLocation())
-                .buildingLocation(request.getBuildingLocation())
-                .roomLocation(request.getRoomLocation())
-                .build();
-        return new ResponseEntity<>(repository.save(building), HttpStatus.CREATED);
+    public ResponseEntity<HibernateBuilding> create(@Valid @RequestBody BuildingSDSaveRequest request,
+                                                    @ApiIgnore Principal principal) {
+        Optional<HibernateUser> userOptional = userSDRepository.findByLogin(principal.getName());
+        HibernateUser user = userOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        request.setUserId(user.getId());
+        HibernateBuilding building = conversionService.convert(request, HibernateBuilding.class);
+        return new ResponseEntity<>(repository.save(Objects.requireNonNull(building)), HttpStatus.CREATED);
     }
 
 
@@ -124,32 +127,14 @@ public class SDBuildingController {
                     dataType = "long", paramType = "path")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<HibernateBuilding> update(@Valid @PathVariable("id") Long buildingId,
-                                                    @RequestBody BuildingSaveRequest request) {
+    public ResponseEntity<HibernateBuilding> update(@PathVariable("id") Long buildingId,
+                                                    @Valid @RequestBody BuildingSDUpdateRequest request) {
         Optional<HibernateBuilding> buildingOptional = repository.findById(buildingId);
-        HibernateBuilding building = buildingOptional.orElseThrow(() ->
+        HibernateBuilding found = buildingOptional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
-        building.setType(request.getType());
-        building.setLandArea(request.getLandArea());
-        building.setRoomsCount(request.getRoomsCount());
-        building.setTotalRoomsArea(request.getTotalRoomsArea());
-        building.setLivingArea(request.getLivingArea());
-        building.setKitchenArea(request.getKitchenArea());
-        building.setBuildingFloors(request.getBuildingFloors());
-        building.setFloor(request.getFloor());
-        building.setBuildingYear(request.getBuildingYear());
-        building.setRepairs(request.isRepairs());
-        building.setGarage(request.isGarage());
-        building.setBarn(request.isBarn());
-        building.setBath(request.isBath());
-        building.setDescription(request.getDescription());
-        building.setCountryLocation(request.getCountryLocation());
-        building.setRegionLocation(request.getRegionLocation());
-        building.setTownLocation(request.getTownLocation());
-        building.setStreetLocation(request.getStreetLocation());
-        building.setBuildingLocation(request.getBuildingLocation());
-        building.setRoomLocation(request.getRoomLocation());
-        return new ResponseEntity<>(repository.save(building), HttpStatus.OK);
+        request.setId(found.getId());
+        HibernateBuilding building = conversionService.convert(request, HibernateBuilding.class);
+        return new ResponseEntity<>(repository.save(Objects.requireNonNull(building)), HttpStatus.OK);
     }
 
 

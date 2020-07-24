@@ -11,28 +11,28 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "building"
+        "activities"
 })
 @ToString(exclude = {
-        "building"
+        "activities"
 })
 @Builder
 @Entity
-@Table(name = "m_rooms")
-public class HibernateRoom implements Serializable {
+@Table(name = "m_real_estate_activities_request")
+public class HibernateRealEstateActivitiesRequest implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "buildings_id", nullable = false)
-    private HibernateBuilding building;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "real_estate_activities_id")
+    private HibernateRealEstateActivities activities;
 
-    @Column(name = "room_area")
-    private Integer roomArea;
+    @Column(name = "user_link")
+    private String userLink;
 
     @Column
-    private String description;
+    private String message;
 }

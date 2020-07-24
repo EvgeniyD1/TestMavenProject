@@ -28,8 +28,9 @@ public class HibernateRole implements Serializable {
     @Column(name = "role_name")
     private String roleName;
 
+    //+
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private HibernateUser user;
 }

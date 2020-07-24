@@ -14,16 +14,14 @@ import java.util.Set;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "roles", "rent", "sale"
+        "roles", "buildings"
 })
 @ToString(exclude = {
-        "roles", "rent", "sale"
+        "roles", "buildings"
 })
 @Builder
 @Entity
 @Table(name = "m_users")
-//@DynamicUpdate
-//@Document(indexName = "user")
 public class HibernateUser implements Serializable {
 
     @Id
@@ -67,17 +65,14 @@ public class HibernateUser implements Serializable {
     @Column(name = "country_location")
     private String countryLocation;
 
+    //+
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<HibernateRole> roles;
 
+    //+
     @JsonManagedReference
-//    @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<HibernateRent> rent;
+    private Set<HibernateBuilding> buildings;
 
-    @JsonManagedReference
-//    @JsonIgnoreProperties("user")
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<HibernateSale> sale;
 }

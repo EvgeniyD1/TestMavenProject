@@ -1,21 +1,20 @@
 package com.htp.controller.springdata.users;
 
 import com.htp.dao.springdata.UserSDRepository;
-import com.htp.domain.hibernate.HibernateRole;
 import com.htp.domain.hibernate.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -24,25 +23,35 @@ import java.util.Optional;
 @RequestMapping("/sd/users")
 public class SDUserController {
 
-    private UserSDRepository repository;
+    private final UserSDRepository repository;
+    private final ConversionService conversionService;
 
-    public SDUserController(UserSDRepository repository) {
+    public SDUserController(UserSDRepository repository, ConversionService conversionService) {
         this.repository = repository;
+        this.conversionService = conversionService;
     }
 
-
-    @ApiOperation(value = "Finding all users")
+    @ApiOperation(value = "Find all users")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading users"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "Page number",
+                    example = "0", defaultValue = "0", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "Items per page",
+                    example = "3", defaultValue = "3", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "sort", value = "Field to sort",
+                    example = "id", defaultValue = "id", dataType = "string", paramType = "query")
+    })
     @GetMapping
-    public ResponseEntity<List<HibernateUser>> findAll() {
-        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
+    public ResponseEntity<Page<HibernateUser>> findAll(@ApiIgnore Pageable pageable) {
+        Page<HibernateUser> users = repository.findAll(pageable);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 
-    @ApiOperation(value = "Finding user by id")
+    @ApiOperation(value = "Find user by id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading user"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
@@ -59,7 +68,7 @@ public class SDUserController {
     }
 
 
-    @ApiOperation(value = "Search user by login")
+    @ApiOperation(value = "Find user by login")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading user"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
@@ -88,25 +97,7 @@ public class SDUserController {
 //    })
     @PostMapping
     public ResponseEntity<HibernateUser> create(@Valid @RequestBody UserSDSaveRequest request) {
-        HibernateUser user = HibernateUser.builder()
-                .username(request.getUsername())
-                .surname(request.getSurname())
-                .patronymic(request.getPatronymic())
-                .phoneNumber(request.getPhoneNumber())
-                .login(request.getLogin())
-                .password(request.getPassword())
-                .created(new Timestamp(new Date().getTime()))
-                .changed(new Timestamp(new Date().getTime()))
-                .blocked(false)
-                .birthDate(request.getBirthDate())
-                .mail(request.getMail())
-                .countryLocation(request.getCountryLocation())
-                .build();
-        HibernateRole role = HibernateRole.builder()
-                .roleName("ROLE_USER")
-                .user(user)
-                .build();
-        user.setRoles(Collections.singleton(role));
+        HibernateUser user = conversionService.convert(request, HibernateUser.class);
         return new ResponseEntity<>(repository.save(user), HttpStatus.CREATED);
     }
 
@@ -121,25 +112,16 @@ public class SDUserController {
     @ApiImplicitParams({
 //            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
 //                    paramType = "header"),
-            @ApiImplicitParam(name = "id", value = "User database id", example = "100" ,required = true,
+            @ApiImplicitParam(name = "id", value = "User database id", example = "0" ,required = true,
                     dataType = "long", paramType = "path")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<HibernateUser> updateUser(@Valid @PathVariable("id") Long userId,
-                                                    @RequestBody UserSDUpdateRequest request) {
+    public ResponseEntity<HibernateUser> updateUser(@PathVariable("id") Long userId,
+                                                    @Valid @RequestBody UserSDUpdateRequest request) {
         Optional<HibernateUser> byId = repository.findById(userId);
-        HibernateUser user = byId.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
-        user.setUsername(request.getUsername());
-        user.setSurname(request.getSurname());
-        user.setPatronymic(request.getPatronymic());
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setLogin(request.getLogin());
-        user.setPassword(request.getPassword());
-        user.setChanged(new Timestamp(new Date().getTime()));
-        user.setBirthDate(request.getBirthDate());
-        user.setBlocked(request.isBlocked());
-        user.setMail(request.getMail());
-        user.setCountryLocation(request.getCountryLocation());
+        HibernateUser found = byId.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        request.setId(found.getId());
+        HibernateUser user = conversionService.convert(request,HibernateUser.class);
         return new ResponseEntity<>(repository.save(user), HttpStatus.OK);
     }
 
@@ -152,7 +134,7 @@ public class SDUserController {
     @ApiImplicitParams({
 //            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
 //                    paramType = "header"),
-            @ApiImplicitParam(name = "id", value = "User database id", example = "100", required = true,
+            @ApiImplicitParam(name = "id", value = "User database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
     @DeleteMapping("/{id}")

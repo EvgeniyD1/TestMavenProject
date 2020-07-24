@@ -1,5 +1,6 @@
 package com.htp.domain.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -12,10 +13,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "rooms", "rent", "sale"
+        "user", "activities"
 })
 @ToString(exclude = {
-        "rooms", "rent", "sale"
+        "user", "activities"
 })
 @Builder
 @Entity
@@ -86,17 +87,14 @@ public class HibernateBuilding implements Serializable {
     @Column(name = "room_location")
     private String roomLocation;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<HibernateRoom> rooms;
+    //+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private HibernateUser user;
+
 
     @JsonManagedReference
-//    @JsonIgnoreProperties("building")
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<HibernateRent> rent;
-
-    @JsonManagedReference
-//    @JsonIgnoreProperties("building")
-    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<HibernateSale> sale;
+    private Set<HibernateRealEstateActivities> activities;
 }

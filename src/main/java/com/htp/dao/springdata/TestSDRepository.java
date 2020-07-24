@@ -4,25 +4,22 @@ import com.htp.domain.hibernate.HibernateUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface UserSDRepository extends CrudRepository<HibernateUser, Long>,
+public interface TestSDRepository extends CrudRepository<HibernateUser, Long>,
         JpaRepository<HibernateUser, Long>,
         PagingAndSortingRepository<HibernateUser, Long> {
 
-    Page<HibernateUser> findAll(Pageable pageable);
+    @Query("select user from HibernateUser user where user.blocked = false")
+    List<HibernateUser> findByBlocked(Pageable pageable);
 
-    Optional<HibernateUser> findById(Long userId);
-
-    Optional<HibernateUser> findByLogin(String login);
-
-//    HibernateUser save(HibernateUser user);
-
-//    void delete(HibernateUser user);
+    @Query("select user from HibernateUser user where user.blocked = false")
+    Page<HibernateUser> findByBlocked2(Pageable pageable);
 
 }
