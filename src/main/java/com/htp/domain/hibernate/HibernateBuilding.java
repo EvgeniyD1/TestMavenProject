@@ -96,5 +96,5 @@ public class HibernateBuilding implements Serializable {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<HibernateRealEstateActivities> activities;
+    private Set<HibernateActivities> activities;
 }

@@ -1,4 +1,4 @@
-package com.htp.controller.springdata.activities;
+package com.htp.controller.springdata.activitiestequest;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,11 +13,12 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@ApiModel(description = "Real estate activities update model")
+@ApiModel(description = "Real estate activities request update model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class REActivitiesSDUpdateRequest extends REActivitiesSDSaveRequest{
+public class ActivitiesRequestSDUpdateRequest extends ActivitiesRequestSDSaveRequest {
 
     @JsonIgnore
-    @ApiModelProperty(dataType = "long", notes = "Real estate activities database id", required = true)
+    @ApiModelProperty(dataType = "long", notes = "Real estate activities request database id", required = true)
     private Long id;
+
 }

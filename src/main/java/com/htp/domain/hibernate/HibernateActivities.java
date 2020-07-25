@@ -21,7 +21,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "m_real_estate_activities")
-public class HibernateRealEstateActivities implements Serializable {
+public class HibernateActivities implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,5 +49,5 @@ public class HibernateRealEstateActivities implements Serializable {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "activities", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<HibernateRealEstateActivitiesRequest> requests;
+    private Set<HibernateActivitiesRequest> requests;
 }

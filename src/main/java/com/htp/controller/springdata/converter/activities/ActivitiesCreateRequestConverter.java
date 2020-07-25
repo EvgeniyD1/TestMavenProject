@@ -1,21 +1,21 @@
 package com.htp.controller.springdata.converter.activities;
 
-import com.htp.controller.springdata.activities.REActivitiesSDSaveRequest;
+import com.htp.controller.springdata.activities.ActivitiesSDSaveRequest;
 import com.htp.domain.hibernate.HibernateBuilding;
-import com.htp.domain.hibernate.HibernateRealEstateActivities;
+import com.htp.domain.hibernate.HibernateActivities;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class REActivitiesCreateRequestConverter extends REActivitiesRequestConverter<REActivitiesSDSaveRequest,
-        HibernateRealEstateActivities>{
+public class ActivitiesCreateRequestConverter extends ActivitiesRequestConverter<ActivitiesSDSaveRequest,
+        HibernateActivities> {
 
     @Override
-    public HibernateRealEstateActivities convert(REActivitiesSDSaveRequest request) {
+    public HibernateActivities convert(ActivitiesSDSaveRequest request) {
 
-        HibernateRealEstateActivities activities = new HibernateRealEstateActivities();
+        HibernateActivities activities = new HibernateActivities();
 
         HibernateBuilding building = Optional.ofNullable(entityManager.find(HibernateBuilding.class,
                 request.getBuildingId())).orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));

@@ -1,6 +1,6 @@
 package com.htp.dao.springdata;
 
-import com.htp.domain.hibernate.HibernateRealEstateActivities;
+import com.htp.domain.hibernate.HibernateActivities;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,15 +12,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RealEstateActivitiesSDRepository extends CrudRepository<HibernateRealEstateActivities, Long>,
-        JpaRepository<HibernateRealEstateActivities, Long>,
-        PagingAndSortingRepository<HibernateRealEstateActivities, Long> {
+public interface ActivitiesSDRepository extends CrudRepository<HibernateActivities, Long>,
+        JpaRepository<HibernateActivities, Long>,
+        PagingAndSortingRepository<HibernateActivities, Long> {
 
-    Page<HibernateRealEstateActivities> findAll(Pageable pageable);
+    Page<HibernateActivities> findAll(Pageable pageable);
 
-    Optional<HibernateRealEstateActivities> findById(Long activitiesId);
+    Optional<HibernateActivities> findById(Long activitiesId);
 
-    List<HibernateRealEstateActivities> findByType(String type);
+    List<HibernateActivities> findByType(String type);
 
 //    HibernateRealEstateActivities save(HibernateRealEstateActivities activities);
 

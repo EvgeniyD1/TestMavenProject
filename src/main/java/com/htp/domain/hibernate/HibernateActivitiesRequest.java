@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Builder
 @Entity
 @Table(name = "m_real_estate_activities_request")
-public class HibernateRealEstateActivitiesRequest implements Serializable {
+public class HibernateActivitiesRequest implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class HibernateRealEstateActivitiesRequest implements Serializable {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "real_estate_activities_id")
-    private HibernateRealEstateActivities activities;
+    private HibernateActivities activities;
 
     @Column(name = "user_link")
     private String userLink;

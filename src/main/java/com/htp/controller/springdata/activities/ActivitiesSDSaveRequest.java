@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @ApiModel(description = "Real estate activities creation model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class REActivitiesSDSaveRequest {
+public class ActivitiesSDSaveRequest {
 
     @ApiModelProperty(required = true, example = "26", dataType = "long", notes = "id")
     private Long buildingId;
