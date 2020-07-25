@@ -74,6 +74,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/sd/buildings/**").permitAll()
                 .antMatchers("/sd/activities/**").permitAll()
                 .antMatchers("/sd/activities_request/**").permitAll()
+                .antMatchers("/sd/chat/**").permitAll()
                 .antMatchers("/sd/test/**").permitAll()
 //                .antMatchers("/sd/**").permitAll()
 //                .antMatchers("/users/**").permitAll()

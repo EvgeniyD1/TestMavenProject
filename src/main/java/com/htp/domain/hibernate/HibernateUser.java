@@ -14,10 +14,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "roles", "buildings"
+        "roles", "buildings", "chats"
 })
 @ToString(exclude = {
-        "roles", "buildings"
+        "roles", "buildings", "chats"
 })
 @Builder
 @Entity
@@ -74,5 +74,9 @@ public class HibernateUser implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<HibernateBuilding> buildings;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<HibernateChat> chats;
 
 }
