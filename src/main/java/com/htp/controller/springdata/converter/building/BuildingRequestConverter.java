@@ -1,6 +1,6 @@
 package com.htp.controller.springdata.converter.building;
 
-import com.htp.controller.springdata.buildings.BuildingSDSaveRequest;
+import com.htp.controller.springdata.buildings.BuildingSDRequest;
 import com.htp.controller.springdata.converter.EntityConverter;
 import com.htp.domain.hibernate.HibernateBuilding;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class BuildingRequestConverter <S, T> extends EntityConverter<S, T> {
 
-    protected HibernateBuilding doConvert(HibernateBuilding building, BuildingSDSaveRequest request) {
+    protected HibernateBuilding doConvert(HibernateBuilding building, BuildingSDRequest request) {
 
         building.setType(request.getType());
         building.setLandArea(request.getLandArea());

@@ -19,7 +19,6 @@ public class ActivityRequestUpdateRequestConverter
                 .ofNullable(entityManager.find(HibernateActivitiesRequest.class,
                         request.getId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
-        request.setUserLink(activitiesRequest.getUserLink());
 
         return doConvert(activitiesRequest, request);
     }

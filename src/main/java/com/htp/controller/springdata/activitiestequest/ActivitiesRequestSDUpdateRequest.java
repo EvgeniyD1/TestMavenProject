@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @ApiModel(description = "Real estate activities request update model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class ActivitiesRequestSDUpdateRequest extends ActivitiesRequestSDSaveRequest {
+public class ActivitiesRequestSDUpdateRequest extends ActivitiesRequestSDRequest {
 
     @JsonIgnore
     @ApiModelProperty(dataType = "long", notes = "Real estate activities request database id", required = true)

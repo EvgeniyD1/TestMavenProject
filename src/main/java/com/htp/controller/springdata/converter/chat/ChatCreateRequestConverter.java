@@ -19,6 +19,7 @@ public class ChatCreateRequestConverter extends ChatRequestConverter<ChatSDSaveR
         HibernateUser user = Optional.ofNullable(entityManager.find(HibernateUser.class, request.getUserId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         chat.setUser(user);
+        chat.setRoomId(request.getRoomId());
 
         return doConvert(chat, request);
     }

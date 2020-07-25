@@ -1,19 +1,19 @@
 package com.htp.controller.springdata.converter.activities;
 
-import com.htp.controller.springdata.activities.ActivitiesSDSaveRequest;
-import com.htp.domain.hibernate.HibernateBuilding;
+import com.htp.controller.springdata.activities.ActivitySDSaveRequest;
 import com.htp.domain.hibernate.HibernateActivities;
+import com.htp.domain.hibernate.HibernateBuilding;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class ActivitiesCreateRequestConverter extends ActivitiesRequestConverter<ActivitiesSDSaveRequest,
+public class ActivitiesCreateRequestConverter extends ActivitiesRequestConverter<ActivitySDSaveRequest,
         HibernateActivities> {
 
     @Override
-    public HibernateActivities convert(ActivitiesSDSaveRequest request) {
+    public HibernateActivities convert(ActivitySDSaveRequest request) {
 
         HibernateActivities activities = new HibernateActivities();
 

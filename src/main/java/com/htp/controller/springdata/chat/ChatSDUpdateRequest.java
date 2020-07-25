@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @ApiModel(description = "Chat message update model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class ChatSDUpdateRequest extends ChatSDSaveRequest{
+public class ChatSDUpdateRequest extends ChatSDRequest {
 
     @JsonIgnore
     @ApiModelProperty(dataType = "long", notes = "Chat message database id", required = true)

@@ -16,6 +16,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -35,6 +36,21 @@ public class SDChatController {
         this.repository = repository;
         this.conversionService = conversionService;
         this.userSDRepository = userSDRepository;
+    }
+
+    @ApiOperation(value = "Search chat message by roomId")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading chat message"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roomId", value = "Search query - roomId", example = "0",
+                    required = true, dataType = "string", paramType = "query")
+    })
+    @GetMapping("/searchByRoom")
+    public ResponseEntity<List<HibernateChat>> searchByRoom(@RequestParam("roomId") Long roomId) {
+        List<HibernateChat> byRoomId = repository.findByRoomId(roomId);
+        return new ResponseEntity<>(byRoomId, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create chat message")

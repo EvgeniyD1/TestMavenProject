@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -91,14 +92,10 @@ public class SDUserController {
             @ApiResponse(code = 422, message = "Failed user creation properties validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header")
-//    })
     @PostMapping
     public ResponseEntity<HibernateUser> create(@Valid @RequestBody UserSDSaveRequest request) {
         HibernateUser user = conversionService.convert(request, HibernateUser.class);
-        return new ResponseEntity<>(repository.save(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(repository.save(Objects.requireNonNull(user)), HttpStatus.CREATED);
     }
 
 
@@ -122,7 +119,7 @@ public class SDUserController {
         HibernateUser found = byId.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         request.setId(found.getId());
         HibernateUser user = conversionService.convert(request,HibernateUser.class);
-        return new ResponseEntity<>(repository.save(user), HttpStatus.OK);
+        return new ResponseEntity<>(repository.save(Objects.requireNonNull(user)), HttpStatus.OK);
     }
 
 

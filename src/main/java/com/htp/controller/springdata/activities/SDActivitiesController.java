@@ -101,7 +101,7 @@ public class SDActivitiesController {
                     paramType = "header")
     })
     @PostMapping
-    public ResponseEntity<HibernateActivities> create(@Valid @RequestBody ActivitiesSDSaveRequest request,
+    public ResponseEntity<HibernateActivities> create(@Valid @RequestBody ActivitySDSaveRequest request,
                                                       @ApiIgnore Principal principal) {
         request.setUserLink("http://localhost:8080/sd/users/searchByLogin?login=" + principal.getName());
         request.setBuildingLink("http://localhost:8080/sd/buildings/");
