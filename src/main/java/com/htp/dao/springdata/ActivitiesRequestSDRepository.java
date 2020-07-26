@@ -20,7 +20,7 @@ public interface ActivitiesRequestSDRepository extends
     @Query("select act from HibernateActivitiesRequest act join act.activities activ where activ.id = :id")
     List<HibernateActivitiesRequest> findAllActivitiesRequestByActivitiesId(@Param("id") Long activityId);
 
-//    HibernateRealEstateActivitiesRequest save(HibernateRealEstateActivitiesRequest activitiesRequest);
-//
-//    void delete(HibernateRealEstateActivitiesRequest activitiesRequest);
+    HibernateActivitiesRequest save(HibernateActivitiesRequest activitiesRequest);
+
+    void delete(HibernateActivitiesRequest activitiesRequest);
 }

@@ -1,10 +1,10 @@
 package com.htp.controller.springdata.chat;
 
-import com.htp.dao.springdata.ChatSDRepository;
-import com.htp.dao.springdata.UserSDRepository;
 import com.htp.domain.hibernate.HibernateChat;
 import com.htp.domain.hibernate.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
+import com.htp.service.springdata.chat.ChatSDService;
+import com.htp.service.springdata.users.UserSDService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
@@ -26,16 +26,16 @@ import java.util.Optional;
 @RequestMapping("/sd/chat")
 public class SDChatController {
 
-    private final ChatSDRepository repository;
+    private final ChatSDService service;
+    private final UserSDService userSDService;
     private final ConversionService conversionService;
-    private final UserSDRepository userSDRepository;
 
-    public SDChatController(ChatSDRepository repository,
-                            ConversionService conversionService,
-                            UserSDRepository userSDRepository) {
-        this.repository = repository;
+    public SDChatController(ChatSDService service,
+                            UserSDService userSDService,
+                            ConversionService conversionService) {
+        this.service = service;
+        this.userSDService = userSDService;
         this.conversionService = conversionService;
-        this.userSDRepository = userSDRepository;
     }
 
     @ApiOperation(value = "Search chat message by roomId")
@@ -49,7 +49,7 @@ public class SDChatController {
     })
     @GetMapping("/searchByRoom")
     public ResponseEntity<List<HibernateChat>> searchByRoom(@RequestParam("roomId") Long roomId) {
-        List<HibernateChat> byRoomId = repository.findByRoomId(roomId);
+        List<HibernateChat> byRoomId = service.findByRoomId(roomId);
         return new ResponseEntity<>(byRoomId, HttpStatus.OK);
     }
 
@@ -66,11 +66,11 @@ public class SDChatController {
     @PostMapping
     public ResponseEntity<HibernateChat> createMessage(@Valid @RequestBody ChatSDSaveRequest request,
                                                        @ApiIgnore Principal principal) {
-        Optional<HibernateUser> userOptional = userSDRepository.findByLogin(principal.getName());
+        Optional<HibernateUser> userOptional = userSDService.findByLogin(principal.getName());
         HibernateUser user = userOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         request.setUserId(user.getId());
         HibernateChat chat = conversionService.convert(request, HibernateChat.class);
-        return new ResponseEntity<>(repository.save(Objects.requireNonNull(chat)), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.save(Objects.requireNonNull(chat)), HttpStatus.CREATED);
     }
 
 
@@ -90,11 +90,11 @@ public class SDChatController {
     @PutMapping("/{id}")
     public ResponseEntity<HibernateChat> updateMessage(@PathVariable("id") Long messageId,
             @Valid @RequestBody ChatSDUpdateRequest request) {
-        Optional<HibernateChat> optional = repository.findById(messageId);
+        Optional<HibernateChat> optional = service.findById(messageId);
         HibernateChat found = optional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         request.setId(found.getId());
         HibernateChat chat = conversionService.convert(request, HibernateChat.class);
-        return new ResponseEntity<>(repository.save(Objects.requireNonNull(chat)), HttpStatus.OK);
+        return new ResponseEntity<>(service.save(Objects.requireNonNull(chat)), HttpStatus.OK);
     }
 
 
@@ -107,10 +107,10 @@ public class SDChatController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteMessage(@PathVariable("id") Long messageId) {
-        Optional<HibernateChat> optional = repository.findById(messageId);
+        Optional<HibernateChat> optional = service.findById(messageId);
         HibernateChat chat = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
-        repository.delete(chat);
+        service.delete(chat);
         String delete = "Activities request with ID = " + chat.getId() + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }

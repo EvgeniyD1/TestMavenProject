@@ -7,6 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ChatSDRepository extends CrudRepository<HibernateChat, Long>,
@@ -15,7 +16,9 @@ public interface ChatSDRepository extends CrudRepository<HibernateChat, Long>,
 
     List<HibernateChat> findByRoomId(Long roomId);
 
-//    HibernateChat save(HibernateChat chat);
-//
-//    void delete(HibernateChat chat);
+    Optional<HibernateChat> findById(Long chatId);
+
+    HibernateChat save(HibernateChat chat);
+
+    void delete(HibernateChat chat);
 }

@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.users;
 
-import com.htp.dao.springdata.UserSDRepository;
 import com.htp.domain.hibernate.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
+import com.htp.service.springdata.users.UserSDService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
@@ -24,11 +24,11 @@ import java.util.Optional;
 @RequestMapping("/sd/users")
 public class SDUserController {
 
-    private final UserSDRepository repository;
+    private final UserSDService service;
     private final ConversionService conversionService;
 
-    public SDUserController(UserSDRepository repository, ConversionService conversionService) {
-        this.repository = repository;
+    public SDUserController(UserSDService service, ConversionService conversionService) {
+        this.service = service;
         this.conversionService = conversionService;
     }
 
@@ -47,7 +47,7 @@ public class SDUserController {
     })
     @GetMapping
     public ResponseEntity<Page<HibernateUser>> findAll(@ApiIgnore Pageable pageable) {
-        Page<HibernateUser> users = repository.findAll(pageable);
+        Page<HibernateUser> users = service.findAll(pageable);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -63,7 +63,7 @@ public class SDUserController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<HibernateUser> findById(@PathVariable("id") Long userId) {
-        Optional<HibernateUser> user = repository.findById(userId);
+        Optional<HibernateUser> user = service.findById(userId);
         HibernateUser hibernateUser = user.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         return new ResponseEntity<>(hibernateUser, HttpStatus.OK);
     }
@@ -80,7 +80,7 @@ public class SDUserController {
     })
     @GetMapping("/searchByLogin")
     public ResponseEntity<HibernateUser> findByLogin(@RequestParam("login") String query) {
-        Optional<HibernateUser> byLogin = repository.findByLogin(query);
+        Optional<HibernateUser> byLogin = service.findByLogin(query);
         HibernateUser hibernateUser = byLogin.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         return new ResponseEntity<>(hibernateUser, HttpStatus.OK);
     }
@@ -95,7 +95,7 @@ public class SDUserController {
     @PostMapping
     public ResponseEntity<HibernateUser> create(@Valid @RequestBody UserSDSaveRequest request) {
         HibernateUser user = conversionService.convert(request, HibernateUser.class);
-        return new ResponseEntity<>(repository.save(Objects.requireNonNull(user)), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.save(Objects.requireNonNull(user)), HttpStatus.CREATED);
     }
 
 
@@ -115,11 +115,11 @@ public class SDUserController {
     @PutMapping("/{id}")
     public ResponseEntity<HibernateUser> updateUser(@PathVariable("id") Long userId,
                                                     @Valid @RequestBody UserSDUpdateRequest request) {
-        Optional<HibernateUser> byId = repository.findById(userId);
+        Optional<HibernateUser> byId = service.findById(userId);
         HibernateUser found = byId.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         request.setId(found.getId());
         HibernateUser user = conversionService.convert(request,HibernateUser.class);
-        return new ResponseEntity<>(repository.save(Objects.requireNonNull(user)), HttpStatus.OK);
+        return new ResponseEntity<>(service.save(Objects.requireNonNull(user)), HttpStatus.OK);
     }
 
 
@@ -136,9 +136,9 @@ public class SDUserController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long userId) {
-        Optional<HibernateUser> byId = repository.findById(userId);
+        Optional<HibernateUser> byId = service.findById(userId);
         HibernateUser user = byId.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
-        repository.delete(user);
+        service.delete(user);
         String delete = "User with ID = " + user.getId() + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }

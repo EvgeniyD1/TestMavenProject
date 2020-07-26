@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.roles;
 
-import com.htp.dao.springdata.RoleSDRepository;
 import com.htp.domain.hibernate.HibernateRole;
 import com.htp.exceptions.ResourceNotFoundException;
+import com.htp.service.springdata.role.RoleSDService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
@@ -24,11 +24,11 @@ import java.util.Optional;
 @RequestMapping("/sd/roles")
 public class SDRoleController {
 
-    private final RoleSDRepository repository;
+    private final RoleSDService service;
     private final ConversionService conversionService;
 
-    public SDRoleController(RoleSDRepository repository, ConversionService conversionService) {
-        this.repository = repository;
+    public SDRoleController(RoleSDService service, ConversionService conversionService) {
+        this.service = service;
         this.conversionService = conversionService;
     }
 
@@ -47,7 +47,7 @@ public class SDRoleController {
     })
     @GetMapping
     public ResponseEntity<Page<HibernateRole>> findAll(@ApiIgnore Pageable pageable) {
-        return new ResponseEntity<>(repository.findAll(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(service.findAll(pageable), HttpStatus.OK);
     }
 
 
@@ -62,7 +62,7 @@ public class SDRoleController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<HibernateRole> findById(@PathVariable("id") Long roleId) {
-        Optional<HibernateRole> role = repository.findById(roleId);
+        Optional<HibernateRole> role = service.findById(roleId);
         HibernateRole hibernateRole = role.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         return new ResponseEntity<>(hibernateRole, HttpStatus.OK);
     }
@@ -79,7 +79,7 @@ public class SDRoleController {
     })
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<HibernateRole>> findAllUserRoles(@PathVariable("userId") Long userId) {
-        List<HibernateRole> roles = repository.findAllRolesByUserId(userId);
+        List<HibernateRole> roles = service.findAllRolesByUserId(userId);
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
@@ -97,7 +97,7 @@ public class SDRoleController {
     @PostMapping
     public ResponseEntity<HibernateRole> create(@Valid @RequestBody RoleSDSaveRequest request) {
         HibernateRole role = conversionService.convert(request, HibernateRole.class);
-        return new ResponseEntity<>(repository.save(role), HttpStatus.OK);
+        return new ResponseEntity<>(service.save(role), HttpStatus.OK);
     }
 
 
@@ -117,11 +117,11 @@ public class SDRoleController {
     @PutMapping("/{id}")
     public ResponseEntity<HibernateRole> update(@PathVariable("id") Long roleId,
                                                 @Valid @RequestBody RoleSDUpdateRequest request) {
-        Optional<HibernateRole> roleOptional = repository.findById(roleId);
+        Optional<HibernateRole> roleOptional = service.findById(roleId);
         HibernateRole found = roleOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         request.setId(found.getId());
         HibernateRole role = conversionService.convert(request, HibernateRole.class);
-        return new ResponseEntity<>(repository.save(role), HttpStatus.OK);
+        return new ResponseEntity<>(service.save(role), HttpStatus.OK);
     }
 
 
@@ -138,9 +138,9 @@ public class SDRoleController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRole(@PathVariable("id") Long roleId) {
-        Optional<HibernateRole> roleOptional = repository.findById(roleId);
+        Optional<HibernateRole> roleOptional = service.findById(roleId);
         HibernateRole role = roleOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
-        repository.delete(role);
+        service.delete(role);
         String delete = "Role with ID = " + roleId + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }

@@ -25,7 +25,7 @@ public interface BuildingSDRepository extends CrudRepository<HibernateBuilding, 
     @Query("select building from HibernateBuilding building  where building.type = :type")
     List<HibernateBuilding> findByType(@Param("type") String type);
 
-//    HibernateBuilding save(HibernateBuilding building);
+    HibernateBuilding save(HibernateBuilding building);
 
-//    void delete(HibernateBuilding building);
+    void delete(HibernateBuilding building);
 }

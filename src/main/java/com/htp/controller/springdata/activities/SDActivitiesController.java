@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.activities;
 
-import com.htp.dao.springdata.ActivitiesSDRepository;
 import com.htp.domain.hibernate.HibernateActivities;
 import com.htp.exceptions.ResourceNotFoundException;
+import com.htp.service.springdata.activity.ActivitySDService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
@@ -26,15 +26,14 @@ import java.util.Optional;
 @RequestMapping("/sd/activities")
 public class SDActivitiesController {
 
-    private final ActivitiesSDRepository repository;
+    private final ActivitySDService service;
     private final ConversionService conversionService;
 
-    public SDActivitiesController(ActivitiesSDRepository repository,
+    public SDActivitiesController(ActivitySDService service,
                                   ConversionService conversionService) {
-        this.repository = repository;
+        this.service = service;
         this.conversionService = conversionService;
     }
-
 
     @ApiOperation(value = "Find all activities")
     @ApiResponses({
@@ -51,7 +50,7 @@ public class SDActivitiesController {
     })
     @GetMapping
     public ResponseEntity<Page<HibernateActivities>> findAll(@ApiIgnore Pageable pageable) {
-        Page<HibernateActivities> activities = repository.findAll(pageable);
+        Page<HibernateActivities> activities = service.findAll(pageable);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
@@ -67,7 +66,7 @@ public class SDActivitiesController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<HibernateActivities> findById(@PathVariable("id") Long activitiesId) {
-        Optional<HibernateActivities> optional = repository.findById(activitiesId);
+        Optional<HibernateActivities> optional = service.findById(activitiesId);
         HibernateActivities activities = optional
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         return new ResponseEntity<>(activities, HttpStatus.OK);
@@ -85,7 +84,7 @@ public class SDActivitiesController {
     })
     @GetMapping("/searchByType")
     public ResponseEntity<List<HibernateActivities>> findByType(@RequestParam("type") String query) {
-        List<HibernateActivities> byType = repository.findByType(query);
+        List<HibernateActivities> byType = service.findByType(query);
         return new ResponseEntity<>(byType, HttpStatus.OK);
     }
 
@@ -107,7 +106,7 @@ public class SDActivitiesController {
         request.setBuildingLink("http://localhost:8080/sd/buildings/");
         HibernateActivities activities = conversionService
                 .convert(request, HibernateActivities.class);
-        return new ResponseEntity<>(repository.save(Objects.requireNonNull(activities)), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.save(Objects.requireNonNull(activities)), HttpStatus.CREATED);
     }
 
 
@@ -127,13 +126,13 @@ public class SDActivitiesController {
     @PutMapping("/{id}")
     public ResponseEntity<HibernateActivities> update(@PathVariable("id") Long activitiesId,
                                                       @Valid @RequestBody ActivitiesSDUpdateRequest request) {
-        Optional<HibernateActivities> optional = repository.findById(activitiesId);
+        Optional<HibernateActivities> optional = service.findById(activitiesId);
         HibernateActivities found = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
         request.setId(found.getId());
         HibernateActivities activities = conversionService.convert(request,
                 HibernateActivities.class);
-        return new ResponseEntity<>(repository.save(Objects.requireNonNull(activities)), HttpStatus.OK);
+        return new ResponseEntity<>(service.save(Objects.requireNonNull(activities)), HttpStatus.OK);
     }
 
 
@@ -146,10 +145,10 @@ public class SDActivitiesController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long activityId) {
-        Optional<HibernateActivities> optional = repository.findById(activityId);
+        Optional<HibernateActivities> optional = service.findById(activityId);
         HibernateActivities activities = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
-        repository.delete(activities);
+        service.delete(activities);
         String delete = "Activities with ID = " + activities.getId() + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }

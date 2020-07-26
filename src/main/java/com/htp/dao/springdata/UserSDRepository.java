@@ -22,7 +22,7 @@ public interface UserSDRepository extends CrudRepository<HibernateUser, Long>,
     Optional<HibernateUser> findByLogin(String login);
 
 //    HibernateUser save(HibernateUser user);
-
+//
 //    void delete(HibernateUser user);
 
 }

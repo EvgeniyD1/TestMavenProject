@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.activitiestequest;
 
-import com.htp.dao.springdata.ActivitiesRequestSDRepository;
 import com.htp.domain.hibernate.HibernateActivitiesRequest;
 import com.htp.exceptions.ResourceNotFoundException;
+import com.htp.service.springdata.activityrequest.ActivityRequestSDService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
@@ -24,15 +24,14 @@ import java.util.Optional;
 @RequestMapping("/sd/activities_request")
 public class SDActivitiesRequestController {
 
-    private final ActivitiesRequestSDRepository repository;
+    private final ActivityRequestSDService service;
     private final ConversionService conversionService;
 
-    public SDActivitiesRequestController(ActivitiesRequestSDRepository repository,
+    public SDActivitiesRequestController(ActivityRequestSDService service,
                                          ConversionService conversionService) {
-        this.repository = repository;
+        this.service = service;
         this.conversionService = conversionService;
     }
-
 
     @ApiOperation(value = "Find activities request by id")
     @ApiResponses({
@@ -45,7 +44,7 @@ public class SDActivitiesRequestController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<HibernateActivitiesRequest> findById(@PathVariable("id") Long activitiesReqId) {
-        Optional<HibernateActivitiesRequest> optional = repository.findById(activitiesReqId);
+        Optional<HibernateActivitiesRequest> optional = service.findById(activitiesReqId);
         HibernateActivitiesRequest request = optional
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         return new ResponseEntity<>(request, HttpStatus.OK);
@@ -64,7 +63,7 @@ public class SDActivitiesRequestController {
     @GetMapping("/activities/{activitiesId}")
     public ResponseEntity<List<HibernateActivitiesRequest>> findAllActivitiesRequestByActivitiesId(
             @PathVariable("activitiesId") Long activitiesId) {
-        List<HibernateActivitiesRequest> roles = repository.findAllActivitiesRequestByActivitiesId(activitiesId);
+        List<HibernateActivitiesRequest> roles = service.findAllActivitiesRequestByActivitiesId(activitiesId);
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
@@ -86,7 +85,7 @@ public class SDActivitiesRequestController {
         request.setUserLink("http://localhost:8080/sd/users/searchByLogin?login=" + principal.getName());
         HibernateActivitiesRequest activitiesRequest = conversionService
                 .convert(request, HibernateActivitiesRequest.class);
-        return new ResponseEntity<>(repository.save(Objects.requireNonNull(activitiesRequest)), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.save(Objects.requireNonNull(activitiesRequest)), HttpStatus.CREATED);
     }
 
 
@@ -107,13 +106,13 @@ public class SDActivitiesRequestController {
     public ResponseEntity<HibernateActivitiesRequest> update(
             @PathVariable("id") Long activitiesRequestId,
             @Valid @RequestBody ActivitiesRequestSDUpdateRequest request) {
-        Optional<HibernateActivitiesRequest> optional = repository.findById(activitiesRequestId);
+        Optional<HibernateActivitiesRequest> optional = service.findById(activitiesRequestId);
         HibernateActivitiesRequest found = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
         request.setId(found.getId());
         HibernateActivitiesRequest activitiesRequest = conversionService.convert(request,
                 HibernateActivitiesRequest.class);
-        return new ResponseEntity<>(repository.save(Objects.requireNonNull(activitiesRequest)), HttpStatus.OK);
+        return new ResponseEntity<>(service.save(Objects.requireNonNull(activitiesRequest)), HttpStatus.OK);
     }
 
 
@@ -126,10 +125,10 @@ public class SDActivitiesRequestController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long activityRequestId) {
-        Optional<HibernateActivitiesRequest> optional = repository.findById(activityRequestId);
+        Optional<HibernateActivitiesRequest> optional = service.findById(activityRequestId);
         HibernateActivitiesRequest activitiesRequest = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
-        repository.delete(activitiesRequest);
+        service.delete(activitiesRequest);
         String delete = "Activities request with ID = " + activitiesRequest.getId() + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }
