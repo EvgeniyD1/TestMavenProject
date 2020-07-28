@@ -1,7 +1,7 @@
 package com.htp.controller.springdata.converter.chat;
 
 import com.htp.controller.springdata.chat.ChatSDUpdateRequest;
-import com.htp.domain.hibernate.HibernateChat;
+import com.htp.domain.HibernateChat;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 

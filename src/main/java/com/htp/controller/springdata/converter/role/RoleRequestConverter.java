@@ -2,7 +2,7 @@ package com.htp.controller.springdata.converter.role;
 
 import com.htp.controller.springdata.converter.EntityConverter;
 import com.htp.controller.springdata.roles.RoleSDSaveRequest;
-import com.htp.domain.hibernate.HibernateRole;
+import com.htp.domain.HibernateRole;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

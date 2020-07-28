@@ -2,7 +2,7 @@ package com.htp.controller.springdata.converter.building;
 
 import com.htp.controller.springdata.buildings.BuildingSDRequest;
 import com.htp.controller.springdata.converter.EntityConverter;
-import com.htp.domain.hibernate.HibernateBuilding;
+import com.htp.domain.HibernateBuilding;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -27,7 +27,7 @@ public class LogAspect {
         return methodInvocation;
     }
 
-    @Pointcut("execution(* com.htp.dao.jdbctemplate..*(..))")
+    @Pointcut("execution(* com.htp.dao..*(..))")
     public void daoJdbcTemplateRepositoryPointcut() {
     }
 

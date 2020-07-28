@@ -2,7 +2,7 @@ package com.htp.controller.springdata.converter.user;
 
 import com.htp.controller.springdata.converter.EntityConverter;
 import com.htp.controller.springdata.users.UserSDSaveRequest;
-import com.htp.domain.hibernate.HibernateUser;
+import com.htp.domain.HibernateUser;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Timestamp;

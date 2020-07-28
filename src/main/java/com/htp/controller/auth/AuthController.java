@@ -1,11 +1,9 @@
 package com.htp.controller.auth;
 
-import com.htp.controller.request.AuthRequest;
-import com.htp.controller.response.AuthResponse;
 import com.htp.controller.springdata.users.UserSDSaveRequest;
-import com.htp.domain.hibernate.HibernateUser;
+import com.htp.domain.HibernateUser;
 import com.htp.security.util.TokenUtils;
-import com.htp.service.springdata.users.UserSDService;
+import com.htp.service.users.UserSDService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;

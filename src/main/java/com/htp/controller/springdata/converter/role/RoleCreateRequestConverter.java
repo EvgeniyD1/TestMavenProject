@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.converter.role;
 
 import com.htp.controller.springdata.roles.RoleSDSaveRequest;
-import com.htp.domain.hibernate.HibernateRole;
-import com.htp.domain.hibernate.HibernateUser;
+import com.htp.domain.HibernateRole;
+import com.htp.domain.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.roles;
 
-import com.htp.domain.hibernate.HibernateRole;
+import com.htp.domain.HibernateRole;
 import com.htp.exceptions.ResourceNotFoundException;
-import com.htp.service.springdata.role.RoleSDService;
+import com.htp.service.role.RoleSDService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;

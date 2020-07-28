@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.activitiestequest;
 
-import com.htp.domain.hibernate.HibernateActivitiesRequest;
+import com.htp.domain.HibernateActivitiesRequest;
 import com.htp.exceptions.ResourceNotFoundException;
-import com.htp.service.springdata.activityrequest.ActivityRequestSDService;
+import com.htp.service.activityrequest.ActivityRequestSDService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;

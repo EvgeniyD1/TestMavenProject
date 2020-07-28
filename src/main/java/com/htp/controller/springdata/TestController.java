@@ -1,7 +1,7 @@
 package com.htp.controller.springdata;
 
-import com.htp.dao.springdata.TestSDRepository;
-import com.htp.domain.hibernate.HibernateUser;
+import com.htp.dao.TestSDRepository;
+import com.htp.domain.HibernateUser;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

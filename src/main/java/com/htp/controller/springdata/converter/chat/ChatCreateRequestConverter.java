@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.converter.chat;
 
 import com.htp.controller.springdata.chat.ChatSDSaveRequest;
-import com.htp.domain.hibernate.HibernateChat;
-import com.htp.domain.hibernate.HibernateUser;
+import com.htp.domain.HibernateChat;
+import com.htp.domain.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 

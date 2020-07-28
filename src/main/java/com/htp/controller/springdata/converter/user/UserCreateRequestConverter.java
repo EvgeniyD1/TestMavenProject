@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.converter.user;
 
 import com.htp.controller.springdata.users.UserSDSaveRequest;
-import com.htp.domain.hibernate.HibernateRole;
-import com.htp.domain.hibernate.HibernateUser;
+import com.htp.domain.HibernateRole;
+import com.htp.domain.HibernateUser;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;

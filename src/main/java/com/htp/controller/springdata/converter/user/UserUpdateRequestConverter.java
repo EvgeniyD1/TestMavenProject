@@ -1,7 +1,7 @@
 package com.htp.controller.springdata.converter.user;
 
 import com.htp.controller.springdata.users.UserSDUpdateRequest;
-import com.htp.domain.hibernate.HibernateUser;
+import com.htp.domain.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 

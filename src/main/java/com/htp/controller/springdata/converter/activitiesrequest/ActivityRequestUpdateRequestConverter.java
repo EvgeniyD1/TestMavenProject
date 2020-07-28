@@ -1,7 +1,7 @@
 package com.htp.controller.springdata.converter.activitiesrequest;
 
 import com.htp.controller.springdata.activitiestequest.ActivitiesRequestSDUpdateRequest;
-import com.htp.domain.hibernate.HibernateActivitiesRequest;
+import com.htp.domain.HibernateActivitiesRequest;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 

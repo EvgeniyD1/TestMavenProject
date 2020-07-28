@@ -2,7 +2,7 @@ package com.htp.controller.springdata.converter.chat;
 
 import com.htp.controller.springdata.chat.ChatSDRequest;
 import com.htp.controller.springdata.converter.EntityConverter;
-import com.htp.domain.hibernate.HibernateChat;
+import com.htp.domain.HibernateChat;
 
 import java.sql.Timestamp;
 import java.util.Date;

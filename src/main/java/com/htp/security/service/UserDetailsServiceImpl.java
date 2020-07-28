@@ -1,9 +1,9 @@
 package com.htp.security.service;
 
-import com.htp.domain.hibernate.HibernateRole;
-import com.htp.domain.hibernate.HibernateUser;
-import com.htp.service.springdata.role.RoleSDService;
-import com.htp.service.springdata.users.UserSDService;
+import com.htp.domain.HibernateRole;
+import com.htp.domain.HibernateUser;
+import com.htp.service.role.RoleSDService;
+import com.htp.service.users.UserSDService;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

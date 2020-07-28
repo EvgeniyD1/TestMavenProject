@@ -1,6 +1,5 @@
 package com.htp.controller;
 
-import com.htp.controller.response.ErrorMessage;
 import com.htp.exceptions.ResourceNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
