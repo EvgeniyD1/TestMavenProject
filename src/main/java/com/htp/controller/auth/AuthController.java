@@ -1,16 +1,16 @@
 package com.htp.controller.auth;
 
 import com.htp.controller.request.AuthRequest;
-import com.htp.controller.request.UserRequest;
 import com.htp.controller.response.AuthResponse;
-import com.htp.domain.Role;
-import com.htp.domain.Roles;
-import com.htp.domain.User;
+import com.htp.controller.springdata.users.UserSDSaveRequest;
+import com.htp.domain.hibernate.HibernateUser;
 import com.htp.security.util.TokenUtils;
-import com.htp.service.RoleService;
-import com.htp.service.UserService;
-import io.swagger.annotations.*;
+import com.htp.service.springdata.users.UserSDService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,28 +23,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.util.Objects;
 
 @RestController
 public class AuthController {
 
-    private TokenUtils tokenUtils;
-    private AuthenticationManager authenticationManager;
-    private UserDetailsService userDetailsService;
-    private UserService userService;
-    private RoleService roleService;
+    private final TokenUtils tokenUtils;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+    private final UserSDService service;
+    private final ConversionService conversionService;
 
     public AuthController(TokenUtils tokenUtils,
                           AuthenticationManager authenticationManager,
                           @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
-                          UserService userService,
-                          RoleService roleService) {
+                          UserSDService service,
+                          ConversionService conversionService) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
-        this.userService = userService;
-        this.roleService = roleService;
+        this.service = service;
+        this.conversionService = conversionService;
     }
 
     @ApiOperation(value = "Login user by username and password")
@@ -78,28 +77,8 @@ public class AuthController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @PostMapping("/registration")
-    public ResponseEntity<User> create(@Valid @RequestBody UserRequest request) {
-        User userForCreate = new User();
-        userForCreate.setUsername(request.getUsername());
-        userForCreate.setSurname(request.getSurname());
-        userForCreate.setPatronymic(request.getPatronymic());
-        userForCreate.setPhoneNumber(request.getPhoneNumber());
-        userForCreate.setLogin(request.getLogin());
-        userForCreate.setPassword(request.getPassword());
-        userForCreate.setCreated(new Timestamp(new Date().getTime()));
-        userForCreate.setChanged(new Timestamp(new Date().getTime()));
-        userForCreate.setBirthDate(request.getBirthDate());
-        userForCreate.setBlocked(request.isBlocked());
-        userForCreate.setMail(request.getMail());
-        userForCreate.setCountryLocation(request.getCountryLocation());
-
-        User saveUser = userService.save(userForCreate);
-        Role role = new Role();
-        role.setRoleName(Roles.ROLE_USER.name());
-        role.setUserId(saveUser.getId());
-        Role saveRole = roleService.save(role);
-        saveUser.setRole(saveRole);
-
-        return new ResponseEntity<>(saveUser, HttpStatus.CREATED);
+    public ResponseEntity<HibernateUser> create(@Valid @RequestBody UserSDSaveRequest request) {
+        HibernateUser user = conversionService.convert(request, HibernateUser.class);
+        return new ResponseEntity<>(service.save(Objects.requireNonNull(user)), HttpStatus.CREATED);
     }
 }

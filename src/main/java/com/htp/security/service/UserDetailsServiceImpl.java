@@ -1,10 +1,9 @@
 package com.htp.security.service;
 
-import com.htp.dao.RoleDao;
-import com.htp.dao.UserDao;
-import com.htp.domain.Role;
-import com.htp.domain.User;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.htp.domain.hibernate.HibernateRole;
+import com.htp.domain.hibernate.HibernateUser;
+import com.htp.service.springdata.role.RoleSDService;
+import com.htp.service.springdata.users.UserSDService;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,30 +11,31 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserDao userDao;
-    private RoleDao roleDao;
+    private final UserSDService userSDService;
+    private final RoleSDService roleSDService;
 
-    public UserDetailsServiceImpl(@Qualifier("userRepositoryJdbcTemplate") UserDao userDao,
-                                  @Qualifier("roleRepositoryJdbcTemplate") RoleDao roleDao) {
-        this.userDao = userDao;
-        this.roleDao = roleDao;
+    public UserDetailsServiceImpl(UserSDService userSDService, RoleSDService roleSDService) {
+        this.userSDService = userSDService;
+        this.roleSDService = roleSDService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User userFindByLogin = userDao.findByLogin(login);
-        if (userFindByLogin != null) {
-            List<Role> userAuthorities = roleDao.findAllRole(userFindByLogin.getId());
-            String collectRoleName = userAuthorities.stream().map(Role::getRoleName)
+        Optional<HibernateUser> byLogin = userSDService.findByLogin(login);
+        HibernateUser user = byLogin.orElseThrow();
+        if (user != null) {
+            List<HibernateRole> roles = roleSDService.findAllRolesByUserId(user.getId());
+            String collectRoleName = roles.stream().map(HibernateRole::getRoleName)
                     .collect(Collectors.joining(","));
             return new org.springframework.security.core.userdetails.User(
-                    userFindByLogin.getLogin(),
-                    userFindByLogin.getPassword(),
+                    user.getLogin(),
+                    user.getPassword(),
                     AuthorityUtils.commaSeparatedStringToAuthorityList(collectRoleName)
             );
         } else {
