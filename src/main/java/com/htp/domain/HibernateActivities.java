@@ -47,6 +47,9 @@ public class HibernateActivities implements Serializable {
     @Column
     private String type;
 
+    @Column
+    private boolean delete;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "activities", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<HibernateActivitiesRequest> requests;

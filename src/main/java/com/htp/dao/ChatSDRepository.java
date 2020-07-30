@@ -18,7 +18,7 @@ public interface ChatSDRepository extends CrudRepository<HibernateChat, Long>,
 
     Optional<HibernateChat> findById(Long chatId);
 
-    HibernateChat save(HibernateChat chat);
-
-    void delete(HibernateChat chat);
+//    HibernateChat save(HibernateChat chat);
+//
+//    void delete(HibernateChat chat);
 }

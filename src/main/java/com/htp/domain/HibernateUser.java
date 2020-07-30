@@ -65,6 +65,9 @@ public class HibernateUser implements Serializable {
     @Column(name = "country_location")
     private String countryLocation;
 
+    @Column
+    private boolean delete;
+
     //+
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

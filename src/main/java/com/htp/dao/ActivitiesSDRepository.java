@@ -22,7 +22,7 @@ public interface ActivitiesSDRepository extends CrudRepository<HibernateActiviti
 
     List<HibernateActivities> findByType(String type);
 
-    HibernateActivities save(HibernateActivities activities);
-
-    void delete(HibernateActivities activities);
+//    HibernateActivities save(HibernateActivities activities);
+//
+//    void delete(HibernateActivities activities);
 }

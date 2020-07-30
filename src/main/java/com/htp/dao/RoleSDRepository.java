@@ -25,8 +25,8 @@ public interface RoleSDRepository extends CrudRepository<HibernateRole, Long>,
     @Query("select role from HibernateRole role join role.user user where user.id = :id")
     List<HibernateRole> findAllRolesByUserId(@Param("id") Long userId);
 
-    HibernateRole save(HibernateRole user);
-
-    void delete(HibernateRole user);
+//    HibernateRole save(HibernateRole user);
+//
+//    void delete(HibernateRole user);
 
 }

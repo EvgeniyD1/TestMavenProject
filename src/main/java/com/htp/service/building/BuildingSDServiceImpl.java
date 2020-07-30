@@ -31,7 +31,6 @@ public class BuildingSDServiceImpl implements BuildingSDService{
     }
 
     @Override
-    @Cacheable
     public Optional<HibernateBuilding> findById(Long buildingId) {
         return repository.findById(buildingId);
     }

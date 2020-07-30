@@ -23,7 +23,6 @@ public class ActivityRequestSDServiceImpl implements ActivityRequestSDService{
     }
 
     @Override
-    @Cacheable
     public Optional<HibernateActivitiesRequest> findById(Long activitiesId) {
         return repository.findById(activitiesId);
     }

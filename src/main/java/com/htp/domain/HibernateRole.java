@@ -33,4 +33,7 @@ public class HibernateRole implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private HibernateUser user;
+
+    @Column
+    private boolean delete;
 }

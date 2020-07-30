@@ -29,7 +29,6 @@ public class ChatSDServiceImpl implements ChatSDService{
     }
 
     @Override
-    @Cacheable
     public Optional<HibernateChat> findById(Long chatId) {
         return repository.findById(chatId);
     }

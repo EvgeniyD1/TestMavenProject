@@ -87,6 +87,9 @@ public class HibernateBuilding implements Serializable {
     @Column(name = "room_location")
     private String roomLocation;
 
+    @Column
+    private boolean delete;
+
     //+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

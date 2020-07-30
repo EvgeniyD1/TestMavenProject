@@ -35,4 +35,7 @@ public class HibernateActivitiesRequest implements Serializable {
 
     @Column
     private String message;
+
+    @Column
+    private boolean delete;
 }

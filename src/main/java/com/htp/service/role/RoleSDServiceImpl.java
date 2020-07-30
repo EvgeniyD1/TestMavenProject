@@ -31,7 +31,6 @@ public class RoleSDServiceImpl implements RoleSDService{
     }
 
     @Override
-    @Cacheable
     public Optional<HibernateRole> findById(Long userId) {
         return repository.findById(userId);
     }

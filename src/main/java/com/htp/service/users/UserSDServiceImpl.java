@@ -30,7 +30,6 @@ public class UserSDServiceImpl implements UserSDService {
     }
 
     @Override
-    @Cacheable
     public Optional<HibernateUser> findById(Long userId) {
         return repository.findById(userId);
     }
