@@ -1,6 +1,10 @@
 package com.htp.controller;
 
-import com.htp.domain.*;
+import com.htp.domain.HibernateActivities;
+import com.htp.domain.HibernateActivitiesRequest;
+import com.htp.domain.HibernateBuilding;
+import com.htp.domain.HibernateRole;
+import com.htp.domain.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.service.activity.ActivitySDService;
 import com.htp.service.activityrequest.ActivityRequestSDService;
@@ -8,12 +12,19 @@ import com.htp.service.building.BuildingSDService;
 import com.htp.service.delete.DeleteService;
 import com.htp.service.role.RoleSDService;
 import com.htp.service.users.UserSDService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
