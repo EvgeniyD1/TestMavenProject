@@ -9,6 +9,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -97,17 +98,24 @@ public class DefaultExceptionHandler {
                 HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
-    public ResponseEntity<ErrorMessage> rollbackException(InvalidDataAccessApiUsageException e){
+    @ExceptionHandler(JpaSystemException.class)
+    public ResponseEntity<ErrorMessage> jpaSystemException(JpaSystemException e){
         log.error(e.getMessage(), e);
-        return new ResponseEntity<>(new ErrorMessage(10L, "Invalid request format"),
+        return new ResponseEntity<>(new ErrorMessage(10L, "Transaction failed"),
+                HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ErrorMessage> invalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new ErrorMessage(11L, "Invalid request format"),
                 HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleOthersException(Exception e) {
         log.error(e.getMessage(), e);
-        return new ResponseEntity<>(new ErrorMessage(11L,e.getLocalizedMessage()),
+        return new ResponseEntity<>(new ErrorMessage(12L,e.getLocalizedMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

@@ -1,6 +1,7 @@
 package com.htp.controller.springdata.activities;
 
 import com.htp.controller.springdata.Link;
+import com.htp.dao.criteria.SpecificationBuilder;
 import com.htp.domain.HibernateActivities;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.service.activity.ActivitySDService;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @RestController
@@ -99,6 +103,29 @@ public class SDActivitiesController {
     public ResponseEntity<List<HibernateActivities>> findByType(@RequestParam("type") String query) {
         List<HibernateActivities> byType = service.findByType(query);
         return new ResponseEntity<>(byType, HttpStatus.OK);
+    }
+
+
+    @ApiOperation(value = "Search Activities by criteria")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading Activities"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "search", value = "Search query - (key)(<:>)(value),('?)(key)(<:>)(value)",
+                    example = "type:rent", required = true, dataType = "string", paramType = "query")
+    })
+    @GetMapping("/searchCriteria")
+    public ResponseEntity<List<HibernateActivities>> search(@RequestParam("search") String search) {
+        SpecificationBuilder<HibernateActivities> builder = new SpecificationBuilder<>();
+        Pattern pattern = Pattern.compile("('?)(\\w+?)([:<>])(\\w+?),");
+        Matcher matcher = pattern.matcher(search + ",");
+        while (matcher.find()) {
+            builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
+        }
+        Specification<HibernateActivities> spec = builder.build();
+        List<HibernateActivities> buildings = service.criteriaSpecification(spec);
+        return new ResponseEntity<>(buildings, HttpStatus.OK);
     }
 
 

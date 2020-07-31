@@ -108,7 +108,6 @@ public class SDBuildingController {
     }
 
 
-
     @ApiOperation(value = "Search Buildings by criteria")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading Buildings"),
@@ -130,7 +129,6 @@ public class SDBuildingController {
         List<HibernateBuilding> buildings = service.criteriaSpecification(spec);
         return new ResponseEntity<>(buildings, HttpStatus.OK);
     }
-
 
 
     @ApiOperation(value = "Create Building")

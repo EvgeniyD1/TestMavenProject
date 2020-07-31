@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,6 +29,11 @@ public class ActivitySDServiceImpl implements ActivitySDService{
     @Cacheable
     public Page<HibernateActivities> findAll(Pageable pageable) {
         return repository.findAll(pageable);
+    }
+
+    @Override
+    public List<HibernateActivities> criteriaSpecification(Specification<HibernateActivities> spec) {
+        return repository.findAll(spec);
     }
 
     @Override
