@@ -7,6 +7,7 @@
 
 <body>
 <h2>User Information</h2>
+<%--@elvariable id="command" type=""--%>
 <form:form method = "POST" action = "/users/save" modelAttribute="command">
     <table>
         <tr>

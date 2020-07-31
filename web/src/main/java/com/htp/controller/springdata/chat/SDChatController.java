@@ -57,7 +57,7 @@ public class SDChatController {
     })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roomId", value = "Search query - roomId", example = "0",
-                    required = true, dataType = "string", paramType = "query")
+                    required = true, dataType = "long", paramType = "query")
     })
     @GetMapping("/searchByRoom")
     public ResponseEntity<List<HibernateChat>> searchByRoom(@RequestParam("roomId") Long roomId) {
@@ -123,7 +123,7 @@ public class SDChatController {
         HibernateChat chat = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
         service.delete(chat);
-        String delete = "Activities request with ID = " + chat.getId() + " deleted";
+        String delete = "Message with ID = " + chat.getId() + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }
 }

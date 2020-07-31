@@ -2,8 +2,6 @@ package com.htp.service.chat;
 
 import com.htp.dao.ChatSDRepository;
 import com.htp.domain.HibernateChat;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -13,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@CacheConfig(cacheNames = {"cache"})
 public class ChatSDServiceImpl implements ChatSDService{
 
     private final ChatSDRepository repository;
@@ -23,7 +20,6 @@ public class ChatSDServiceImpl implements ChatSDService{
     }
 
     @Override
-    @Cacheable
     public List<HibernateChat> findByRoomId(Long roomId) {
         return repository.findByRoomId(roomId);
     }
