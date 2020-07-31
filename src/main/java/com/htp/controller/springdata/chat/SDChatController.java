@@ -82,8 +82,8 @@ public class SDChatController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Chat message database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -100,8 +100,8 @@ public class SDChatController {
 
     @ApiOperation(value = "Delete chat message")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Chat message database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })

@@ -50,8 +50,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "User database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -71,8 +71,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "User database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -92,8 +92,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Role database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -113,8 +113,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Role database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -134,8 +134,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Building database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -156,8 +156,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Building database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -178,8 +178,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Activities database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -200,8 +200,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Activities database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -222,8 +222,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Activities request database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -244,8 +244,8 @@ public class DeleteController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Activities request database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })

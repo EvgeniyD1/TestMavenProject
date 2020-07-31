@@ -20,8 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsService userDetailsService;
-    private TokenUtils tokenUtils;
+    private final UserDetailsService userDetailsService;
+    private final TokenUtils tokenUtils;
 
     public WebSecurityConfiguration(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
                                     TokenUtils tokenUtils) {
@@ -67,20 +67,41 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/logout/**").permitAll()
                 .antMatchers("/statistic/**").permitAll()
                 .antMatchers("/hello/**").permitAll()
-                .antMatchers("/sd/users/**").permitAll()
-                .antMatchers("/sd/roles/**").permitAll()
-                .antMatchers("/sd/buildings/**").permitAll()
-                .antMatchers("/sd/activities/**").permitAll()
-                .antMatchers("/sd/activities_request/**").permitAll()
-                .antMatchers("/sd/chat/**").permitAll()
-                .antMatchers("/sd/test/**").permitAll()
-                .antMatchers("/delete/**").permitAll()
-//                .antMatchers("/sd/**").permitAll()
-//                .antMatchers("/users/**").permitAll()
+
+                .antMatchers(HttpMethod.GET,"/sd/users/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/sd/users/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/sd/users/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/sd/users/**").hasAnyRole("ADMIN", "MODERATOR")
+
+                .antMatchers(HttpMethod.GET,"/sd/roles/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/sd/roles/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/sd/roles/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/sd/roles/**").hasAnyRole("ADMIN")
+
+                .antMatchers(HttpMethod.GET,"/sd/buildings/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/sd/buildings/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/sd/buildings/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/sd/buildings/**").hasAnyRole("ADMIN", "MODERATOR")
+
+                .antMatchers(HttpMethod.GET,"/sd/activities/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/sd/activities/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/sd/activities/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/sd/activities/**").hasAnyRole("ADMIN", "MODERATOR")
+
+                .antMatchers(HttpMethod.GET,"/sd/activities_request/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/sd/activities_request/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/sd/activities_request/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/sd/activities_request/**").hasAnyRole("ADMIN", "MODERATOR")
+
+                .antMatchers(HttpMethod.GET,"/sd/chat/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/sd/chat/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/sd/chat/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/sd/chat/**").hasAnyRole("ADMIN", "MODERATOR")
+
+                .antMatchers("/delete/**").hasAnyRole("ADMIN", "MODERATOR")
                 .antMatchers("/users/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//                .antMatchers("/v2/api-docs/**", "/configuration/ui/**", "/swagger-resources/**",
-//                        "/configuration/security/**", "/swagger-ui.html/**", "/webjars/**").permitAll()
+
                 .anyRequest().authenticated();
         http.addFilterBefore(authenticationTokenFilterBean(authenticationManagerBean()),
                 UsernamePasswordAuthenticationFilter.class);

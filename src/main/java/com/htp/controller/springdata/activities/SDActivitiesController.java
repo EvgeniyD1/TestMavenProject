@@ -1,5 +1,6 @@
 package com.htp.controller.springdata.activities;
 
+import com.htp.controller.springdata.Link;
 import com.htp.domain.HibernateActivities;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.service.activity.ActivitySDService;
@@ -102,8 +103,8 @@ public class SDActivitiesController {
     @PostMapping
     public ResponseEntity<HibernateActivities> create(@Valid @RequestBody ActivitySDSaveRequest request,
                                                       @ApiIgnore Principal principal) {
-        request.setUserLink("http://localhost:8080/sd/users/searchByLogin?login=" + principal.getName());
-        request.setBuildingLink("http://localhost:8080/sd/buildings/");
+        request.setUserLink(Link.URL + "/sd/users/searchByLogin?login=" + principal.getName());
+        request.setBuildingLink(Link.URL + "/sd/buildings/");
         HibernateActivities activities = conversionService
                 .convert(request, HibernateActivities.class);
         return new ResponseEntity<>(service.save(Objects.requireNonNull(activities)), HttpStatus.CREATED);
@@ -118,8 +119,8 @@ public class SDActivitiesController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Activities database id", example = "20", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -138,8 +139,8 @@ public class SDActivitiesController {
 
     @ApiOperation(value = "Delete Activities")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Activities database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })

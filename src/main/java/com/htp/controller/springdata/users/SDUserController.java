@@ -1,5 +1,6 @@
 package com.htp.controller.springdata.users;
 
+import com.htp.dao.criteria.SpecificationBuilder;
 import com.htp.domain.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
 import com.htp.service.users.UserSDService;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @RestController
@@ -86,17 +91,40 @@ public class SDUserController {
     }
 
 
-    @ApiOperation(value = "Create user")
+    @ApiOperation(value = "Search Users by criteria")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Successful creation user"),
-            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
+            @ApiResponse(code = 200, message = "Successful loading Users"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
-    @PostMapping
-    public ResponseEntity<HibernateUser> create(@Valid @RequestBody UserSDSaveRequest request) {
-        HibernateUser user = conversionService.convert(request, HibernateUser.class);
-        return new ResponseEntity<>(service.save(Objects.requireNonNull(user)), HttpStatus.CREATED);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "search", value = "Search query - (key)(<:>)(value),('?)(key)(<:>)(value)",
+                    example = "username:User", required = true, dataType = "string", paramType = "query")
+    })
+    @GetMapping("/searchCriteria")
+    public ResponseEntity<List<HibernateUser>> search(@RequestParam("search") String search) {
+        SpecificationBuilder<HibernateUser> builder = new SpecificationBuilder<>();
+        Pattern pattern = Pattern.compile("('?)(\\w+?)([:<>])(\\w+?),");
+        Matcher matcher = pattern.matcher(search + ",");
+        while (matcher.find()) {
+            builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
+        }
+        Specification<HibernateUser> spec = builder.build();
+        List<HibernateUser> buildings = service.criteriaSpecification(spec);
+        return new ResponseEntity<>(buildings, HttpStatus.OK);
     }
+
+
+//    @ApiOperation(value = "Create user")
+//    @ApiResponses({
+//            @ApiResponse(code = 201, message = "Successful creation user"),
+//            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
+//            @ApiResponse(code = 500, message = "Server error, something wrong")
+//    })
+//    @PostMapping
+//    public ResponseEntity<HibernateUser> create(@Valid @RequestBody UserSDSaveRequest request) {
+//        HibernateUser user = conversionService.convert(request, HibernateUser.class);
+//        return new ResponseEntity<>(service.save(Objects.requireNonNull(user)), HttpStatus.CREATED);
+//    }
 
 
     @ApiOperation(value = "Update user")
@@ -107,8 +135,8 @@ public class SDUserController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "User database id", example = "0" ,required = true,
                     dataType = "long", paramType = "path")
     })
@@ -129,8 +157,8 @@ public class SDUserController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "User database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })

@@ -1,4 +1,4 @@
-package com.htp.dao;
+package com.htp.dao.delete;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class DeleteDaoImpl implements DeleteDao{
+public class DeleteDaoImpl implements DeleteDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 

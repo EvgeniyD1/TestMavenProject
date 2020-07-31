@@ -90,10 +90,10 @@ public class SDRoleController {
             @ApiResponse(code = 422, message = "Failed Role creation properties validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header")
-//    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header")
+    })
     @PostMapping
     public ResponseEntity<HibernateRole> create(@Valid @RequestBody RoleSDSaveRequest request) {
         HibernateRole role = conversionService.convert(request, HibernateRole.class);
@@ -109,8 +109,8 @@ public class SDRoleController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Role database id (userId not use)", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -131,8 +131,8 @@ public class SDRoleController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Role database id", example = "0", required = true,
                     dataType = "long", paramType = "path")
     })

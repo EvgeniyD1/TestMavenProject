@@ -1,6 +1,6 @@
 package com.htp.service.delete;
 
-import com.htp.dao.DeleteDao;
+import com.htp.dao.delete.DeleteDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;

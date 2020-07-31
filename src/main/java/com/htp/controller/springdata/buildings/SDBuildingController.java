@@ -1,5 +1,6 @@
 package com.htp.controller.springdata.buildings;
 
+import com.htp.dao.criteria.SpecificationBuilder;
 import com.htp.domain.HibernateBuilding;
 import com.htp.domain.HibernateUser;
 import com.htp.exceptions.ResourceNotFoundException;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @RestController
@@ -92,6 +96,31 @@ public class SDBuildingController {
     }
 
 
+
+    @ApiOperation(value = "Search Buildings by criteria")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading Buildings"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "search", value = "Search query - (key)(<:>)(value),('?)(key)(<:>)(value)",
+                    example = "type:flat,roomsCount>2", required = true, dataType = "string", paramType = "query")
+    })
+    @GetMapping("/searchCriteria")
+    public ResponseEntity<List<HibernateBuilding>> search(@RequestParam("search") String search) {
+        SpecificationBuilder<HibernateBuilding> builder = new SpecificationBuilder<>();
+        Pattern pattern = Pattern.compile("('?)(\\w+?)([:<>])(\\w+?),");
+        Matcher matcher = pattern.matcher(search + ",");
+        while (matcher.find()) {
+            builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
+        }
+        Specification<HibernateBuilding> spec = builder.build();
+        List<HibernateBuilding> buildings = service.criteriaSpecification(spec);
+        return new ResponseEntity<>(buildings, HttpStatus.OK);
+    }
+
+
+
     @ApiOperation(value = "Create Building")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Successful creation Building"),
@@ -121,8 +150,8 @@ public class SDBuildingController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Building database id", example = "2", required = true,
                     dataType = "long", paramType = "path")
     })
@@ -140,8 +169,8 @@ public class SDBuildingController {
 
     @ApiOperation(value = "Delete Building")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
-//                    paramType = "header"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string",
+                    paramType = "header"),
             @ApiImplicitParam(name = "id", value = "Building database id", example = "100", required = true,
                     dataType = "long", paramType = "path")
     })

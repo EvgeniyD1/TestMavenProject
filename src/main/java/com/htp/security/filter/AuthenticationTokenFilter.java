@@ -19,8 +19,8 @@ import java.io.IOException;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
-    private TokenUtils tokenUtils;
-    private UserDetailsService userDetailsService;
+    private final TokenUtils tokenUtils;
+    private final UserDetailsService userDetailsService;
 
     public AuthenticationTokenFilter(TokenUtils tokenUtils,
                                      @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
