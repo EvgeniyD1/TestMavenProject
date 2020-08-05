@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
-  <component name="FacetManager">
-    <facet type="AspectJ" name="AspectJ">
-      <configuration>
-        <option name="aspectPath">
-          <projectLibrary>
-            <option name="name" value="Maven: org.springframework:spring-aop:5.2.6.RELEASE" />
-          </projectLibrary>
-          <projectLibrary>
-            <option name="name" value="Maven: org.aspectj:aspectjrt:1.9.5" />
-          </projectLibrary>
-          <projectLibrary>
-            <option name="name" value="Maven: org.aspectj:aspectjweaver:1.9.5" />
-          </projectLibrary>
-        </option>
-      </configuration>
-    </facet>
+<module version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
