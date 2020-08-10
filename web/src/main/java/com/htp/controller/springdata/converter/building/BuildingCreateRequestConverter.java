@@ -1,21 +1,21 @@
 package com.htp.controller.springdata.converter.building;
 
-import com.htp.controller.springdata.buildings.BuildingSDSaveRequest;
-import com.htp.domain.HibernateBuilding;
-import com.htp.domain.HibernateUser;
+import com.htp.controller.springdata.buildings.BuildingSaveRequest;
+import com.htp.domain.Building;
+import com.htp.domain.User;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class BuildingCreateRequestConverter extends BuildingRequestConverter<BuildingSDSaveRequest, HibernateBuilding>{
+public class BuildingCreateRequestConverter extends BuildingRequestConverter<BuildingSaveRequest, Building>{
 
     @Override
-    public HibernateBuilding convert(BuildingSDSaveRequest request) {
+    public Building convert(BuildingSaveRequest request) {
 
-        HibernateBuilding building = new HibernateBuilding();
-        HibernateUser user = Optional.ofNullable(entityManager.find(HibernateUser.class, request.getUserId()))
+        Building building = new Building();
+        User user = Optional.ofNullable(entityManager.find(User.class, request.getUserId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         building.setUser(user);
 

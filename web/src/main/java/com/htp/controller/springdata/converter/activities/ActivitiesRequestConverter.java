@@ -1,15 +1,15 @@
 package com.htp.controller.springdata.converter.activities;
 
-import com.htp.controller.springdata.activities.ActivitiesSDRequest;
+import com.htp.controller.springdata.activities.ActivitiesRequest;
 import com.htp.controller.springdata.converter.EntityConverter;
-import com.htp.domain.HibernateActivities;
+import com.htp.domain.Activities;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class ActivitiesRequestConverter<S, T> extends EntityConverter<S, T> {
 
-    protected HibernateActivities doConvert(HibernateActivities activities,
-                                            ActivitiesSDRequest request) {
+    protected Activities doConvert(Activities activities,
+                                   ActivitiesRequest request) {
 
         activities.setPrice(request.getPrice());
         activities.setCurrency(request.getCurrency());

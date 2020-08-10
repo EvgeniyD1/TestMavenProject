@@ -1,21 +1,21 @@
 package com.htp.controller.springdata.converter.activities;
 
-import com.htp.controller.springdata.activities.ActivitiesSDUpdateRequest;
-import com.htp.domain.HibernateActivities;
+import com.htp.controller.springdata.activities.ActivitiesUpdateRequest;
+import com.htp.domain.Activities;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class ActivitiesUpdateRequestConverter extends ActivitiesRequestConverter<ActivitiesSDUpdateRequest,
-        HibernateActivities> {
+public class ActivitiesUpdateRequestConverter extends ActivitiesRequestConverter<ActivitiesUpdateRequest,
+        Activities> {
 
     @Override
-    public HibernateActivities convert(ActivitiesSDUpdateRequest request) {
+    public Activities convert(ActivitiesUpdateRequest request) {
 
-        HibernateActivities activities = Optional.ofNullable(
-                entityManager.find(HibernateActivities.class, request.getId()))
+        Activities activities = Optional.ofNullable(
+                entityManager.find(Activities.class, request.getId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
 
         return doConvert(activities, request);

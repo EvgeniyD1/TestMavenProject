@@ -1,21 +1,21 @@
 package com.htp.controller.springdata.converter.role;
 
-import com.htp.controller.springdata.roles.RoleSDSaveRequest;
-import com.htp.domain.HibernateRole;
-import com.htp.domain.HibernateUser;
+import com.htp.controller.springdata.roles.RoleSaveRequest;
+import com.htp.domain.Role;
+import com.htp.domain.User;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class RoleCreateRequestConverter extends RoleRequestConverter<RoleSDSaveRequest, HibernateRole>{
+public class RoleCreateRequestConverter extends RoleRequestConverter<RoleSaveRequest, Role>{
 
     @Override
-    public HibernateRole convert(RoleSDSaveRequest request) {
+    public Role convert(RoleSaveRequest request) {
 
-        HibernateRole role = new HibernateRole();
-        HibernateUser user = Optional.ofNullable(entityManager.find(HibernateUser.class, request.getUserId()))
+        Role role = new Role();
+        User user = Optional.ofNullable(entityManager.find(User.class, request.getUserId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         role.setUser(user);
 

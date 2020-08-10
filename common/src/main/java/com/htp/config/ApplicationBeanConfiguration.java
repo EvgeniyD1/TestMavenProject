@@ -51,6 +51,7 @@ public class ApplicationBeanConfiguration {
         factoryBean.setPackagesToScan("com.htp");
         factoryBean.setDataSource(dataSource);
         factoryBean.setAnnotatedPackages("com.htp");
+//        factoryBean.setHibernateProperties(getAdditionalProperties());
         factoryBean.afterPropertiesSet();
         SessionFactory sf = factoryBean.getObject();
         System.out.println("## getSessionFactory: " + sf);
@@ -77,8 +78,6 @@ public class ApplicationBeanConfiguration {
 
     private Properties getAdditionalProperties() {
         Properties properties = new Properties();
-
-        // See: application.properties
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL10Dialect");
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.connection.characterEncoding", "utf8mb4");

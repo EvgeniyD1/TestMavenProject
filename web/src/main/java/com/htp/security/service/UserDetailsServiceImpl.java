@@ -1,9 +1,9 @@
 package com.htp.security.service;
 
-import com.htp.domain.HibernateRole;
-import com.htp.domain.HibernateUser;
-import com.htp.service.role.RoleSDService;
-import com.htp.service.users.UserSDService;
+import com.htp.domain.Role;
+import com.htp.domain.User;
+import com.htp.service.role.RoleService;
+import com.htp.service.users.UserService;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,21 +17,21 @@ import java.util.stream.Collectors;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserSDService userSDService;
-    private final RoleSDService roleSDService;
+    private final UserService userService;
+    private final RoleService roleService;
 
-    public UserDetailsServiceImpl(UserSDService userSDService, RoleSDService roleSDService) {
-        this.userSDService = userSDService;
-        this.roleSDService = roleSDService;
+    public UserDetailsServiceImpl(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        Optional<HibernateUser> byLogin = userSDService.findByLogin(login);
-        HibernateUser user = byLogin.orElseThrow();
+        Optional<User> byLogin = userService.findByLogin(login);
+        User user = byLogin.orElseThrow();
         if (user != null) {
-            List<HibernateRole> roles = roleSDService.findAllRolesByUserId(user.getId());
-            String collectRoleName = roles.stream().map(HibernateRole::getRoleName)
+            List<Role> roles = roleService.findAllRolesByUserId(user.getId());
+            String collectRoleName = roles.stream().map(Role::getRoleName)
                     .collect(Collectors.joining(","));
             return new org.springframework.security.core.userdetails.User(
                     user.getLogin(),

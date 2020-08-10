@@ -1,22 +1,22 @@
 package com.htp.controller.springdata.converter.chat;
 
-import com.htp.controller.springdata.chat.ChatSDSaveRequest;
-import com.htp.domain.HibernateChat;
-import com.htp.domain.HibernateUser;
+import com.htp.controller.springdata.chat.ChatSaveRequest;
+import com.htp.domain.Chat;
+import com.htp.domain.User;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class ChatCreateRequestConverter extends ChatRequestConverter<ChatSDSaveRequest, HibernateChat>{
+public class ChatCreateRequestConverter extends ChatRequestConverter<ChatSaveRequest, Chat>{
 
     @Override
-    public HibernateChat convert(ChatSDSaveRequest request) {
+    public Chat convert(ChatSaveRequest request) {
 
-        HibernateChat chat = new HibernateChat();
+        Chat chat = new Chat();
 
-        HibernateUser user = Optional.ofNullable(entityManager.find(HibernateUser.class, request.getUserId()))
+        User user = Optional.ofNullable(entityManager.find(User.class, request.getUserId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         chat.setUser(user);
         chat.setRoomId(request.getRoomId());

@@ -1,8 +1,8 @@
 package com.htp.controller.springdata.converter.activitiesrequest;
 
-import com.htp.controller.springdata.activitiestequest.ActivitiesRequestSDSaveRequest;
-import com.htp.domain.HibernateActivities;
-import com.htp.domain.HibernateActivitiesRequest;
+import com.htp.controller.springdata.activitiestequest.ActivitiesRequestSaveRequest;
+import com.htp.domain.Activities;
+import com.htp.domain.ActivitiesRequest;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -10,16 +10,16 @@ import java.util.Optional;
 
 @Component
 public class ActivityRequestCreateRequestConverter
-        extends ActivityRequestRequestConverter<ActivitiesRequestSDSaveRequest,
-                HibernateActivitiesRequest> {
+        extends ActivityRequestRequestConverter<ActivitiesRequestSaveRequest,
+        ActivitiesRequest> {
 
     @Override
-    public HibernateActivitiesRequest convert(ActivitiesRequestSDSaveRequest request) {
+    public ActivitiesRequest convert(ActivitiesRequestSaveRequest request) {
 
-        HibernateActivitiesRequest activitiesRequest = new HibernateActivitiesRequest();
+        ActivitiesRequest activitiesRequest = new ActivitiesRequest();
 
-        HibernateActivities activities = Optional.ofNullable(
-                entityManager.find(HibernateActivities.class, request.getRealEstateActivityId()))
+        Activities activities = Optional.ofNullable(
+                entityManager.find(Activities.class, request.getRealEstateActivityId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         activitiesRequest.setActivities(activities);
         activitiesRequest.setUserLink(request.getUserLink());

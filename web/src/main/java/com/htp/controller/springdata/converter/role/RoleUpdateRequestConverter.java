@@ -1,19 +1,19 @@
 package com.htp.controller.springdata.converter.role;
 
-import com.htp.controller.springdata.roles.RoleSDUpdateRequest;
-import com.htp.domain.HibernateRole;
+import com.htp.controller.springdata.roles.RoleUpdateRequest;
+import com.htp.domain.Role;
 import com.htp.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class RoleUpdateRequestConverter extends RoleRequestConverter<RoleSDUpdateRequest, HibernateRole>{
+public class RoleUpdateRequestConverter extends RoleRequestConverter<RoleUpdateRequest, Role>{
 
     @Override
-    public HibernateRole convert(RoleSDUpdateRequest request) {
+    public Role convert(RoleUpdateRequest request) {
 
-        HibernateRole role = Optional.ofNullable(entityManager.find(HibernateRole.class, request.getId()))
+        Role role = Optional.ofNullable(entityManager.find(Role.class, request.getId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
 
         return doConvert(role, request);

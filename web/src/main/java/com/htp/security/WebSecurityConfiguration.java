@@ -48,7 +48,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) throws Exception{
         web.ignoring()
                 .antMatchers("/v2/api-docs/**", "/configuration/ui/**", "/swagger-resources/**",
                         "/configuration/security/**", "/swagger-ui.html", "/webjars/**");
@@ -68,38 +68,37 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/statistic/**").permitAll()
                 .antMatchers("/hello/**").permitAll()
 
-                .antMatchers(HttpMethod.GET,"/sd/users/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/sd/users/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.PUT,"/sd/users/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.DELETE,"/sd/users/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.GET,"/users/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/users/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/users/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/users/**").hasAnyRole("ADMIN", "MODERATOR")
 
-                .antMatchers(HttpMethod.GET,"/sd/roles/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/sd/roles/**").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.PUT,"/sd/roles/**").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/sd/roles/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/roles/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/roles/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"roles/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/roles/**").hasAnyRole("ADMIN")
 
-                .antMatchers(HttpMethod.GET,"/sd/buildings/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/sd/buildings/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.PUT,"/sd/buildings/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.DELETE,"/sd/buildings/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.GET,"/buildings/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/buildings/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/buildings/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/buildings/**").hasAnyRole("ADMIN", "MODERATOR")
 
-                .antMatchers(HttpMethod.GET,"/sd/activities/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/sd/activities/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.PUT,"/sd/activities/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.DELETE,"/sd/activities/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.GET,"/activities/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/activities/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/activities/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/activities/**").hasAnyRole("ADMIN", "MODERATOR")
 
-                .antMatchers(HttpMethod.GET,"/sd/activities_request/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/sd/activities_request/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.PUT,"/sd/activities_request/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.DELETE,"/sd/activities_request/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.GET,"/activities_request/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/activities_request/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/activities_request/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/activities_request/**").hasAnyRole("ADMIN", "MODERATOR")
 
-                .antMatchers(HttpMethod.GET,"/sd/chat/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/sd/chat/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.PUT,"/sd/chat/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
-                .antMatchers(HttpMethod.DELETE,"/sd/chat/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.GET,"/chat/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/chat/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/chat/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE,"/chat/**").hasAnyRole("ADMIN", "MODERATOR")
 
                 .antMatchers("/delete/**").hasAnyRole("ADMIN", "MODERATOR")
-                .antMatchers("/users/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                 .anyRequest().authenticated();

@@ -184,72 +184,72 @@ VALUES (14, 4, 2, '2020-07-28 15:57:37.966000', 'message', false);
 
 
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (27, 33, 1000000, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=ED',
-        'http://localhost:8080/sd/buildings/33', 'sale', false);
+VALUES (27, 33, 1000000, 'RUB', 'http://localhost:8080/users/searchByLogin?login=ED',
+        'http://localhost:8080/buildings/33', 'sale', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (28, 34, 1000, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=ED',
-        'http://localhost:8080/sd/buildings/34', 'rent', false);
+VALUES (28, 34, 1000, 'RUB', 'http://localhost:8080/users/searchByLogin?login=ED',
+        'http://localhost:8080/buildings/34', 'rent', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (29, 35, 1100, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=ED',
-        'http://localhost:8080/sd/buildings/35', 'rent', false);
+VALUES (29, 35, 1100, 'RUB', 'http://localhost:8080/users/searchByLogin?login=ED',
+        'http://localhost:8080/buildings/35', 'rent', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (30, 36, 300, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=login111',
-        'http://localhost:8080/sd/buildings/36', 'rent', false);
+VALUES (30, 36, 300, 'RUB', 'http://localhost:8080/users/searchByLogin?login=login111',
+        'http://localhost:8080/buildings/36', 'rent', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (31, 37, 300, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=login111',
-        'http://localhost:8080/sd/buildings/37', 'rent', false);
+VALUES (31, 37, 300, 'RUB', 'http://localhost:8080/users/searchByLogin?login=login111',
+        'http://localhost:8080/buildings/37', 'rent', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (32, 37, 20000, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=login111',
-        'http://localhost:8080/sd/buildings/37', 'sale', false);
+VALUES (32, 37, 20000, 'RUB', 'http://localhost:8080/users/searchByLogin?login=login111',
+        'http://localhost:8080/buildings/37', 'sale', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (33, 39, 20000, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=login',
-        'http://localhost:8080/sd/buildings/39', 'sale', false);
+VALUES (33, 39, 20000, 'RUB', 'http://localhost:8080/users/searchByLogin?login=login',
+        'http://localhost:8080/buildings/39', 'sale', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (34, 40, 200000, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=login',
-        'http://localhost:8080/sd/buildings/40', 'sale', false);
+VALUES (34, 40, 200000, 'RUB', 'http://localhost:8080/users/searchByLogin?login=login',
+        'http://localhost:8080/buildings/40', 'sale', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (35, 41, 2000, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=login',
-        'http://localhost:8080/sd/buildings/41', 'rent', false);
+VALUES (35, 41, 2000, 'RUB', 'http://localhost:8080/users/searchByLogin?login=login',
+        'http://localhost:8080/buildings/41', 'rent', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (36, 42, 20000, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=login123',
-        'http://localhost:8080/sd/buildings/42', 'rent', false);
+VALUES (36, 42, 20000, 'RUB', 'http://localhost:8080/users/searchByLogin?login=login123',
+        'http://localhost:8080/buildings/42', 'rent', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (37, 43, 20000, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=login123',
-        'http://localhost:8080/sd/buildings/43', 'rent', false);
+VALUES (37, 43, 20000, 'RUB', 'http://localhost:8080/users/searchByLogin?login=login123',
+        'http://localhost:8080/buildings/43', 'rent', false);
 INSERT INTO public.m_real_estate_activities (id, building_id, price, currency, user_link, building_link, type, delete)
-VALUES (38, 44, 2000000, 'RUB', 'http://localhost:8080/sd/users/searchByLogin?login=login123',
-        'http://localhost:8080/sd/buildings/44', 'sale', false);
+VALUES (38, 44, 2000000, 'RUB', 'http://localhost:8080/users/searchByLogin?login=login123',
+        'http://localhost:8080/buildings/44', 'sale', false);
 
 
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (6, 27, 'http://localhost:8080/sd/users/searchByLogin?login=login123', 'I want to see', false);
+VALUES (6, 27, 'http://localhost:8080/users/searchByLogin?login=login123', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (7, 28, 'http://localhost:8080/sd/users/searchByLogin?login=login123', 'I want to see', false);
+VALUES (7, 28, 'http://localhost:8080/users/searchByLogin?login=login123', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (8, 29, 'http://localhost:8080/sd/users/searchByLogin?login=login123', 'I want to see', false);
+VALUES (8, 29, 'http://localhost:8080/users/searchByLogin?login=login123', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (9, 29, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (9, 29, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (10, 30, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (10, 30, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (11, 31, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (11, 31, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (12, 32, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (12, 32, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (13, 33, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (13, 33, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (14, 34, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (14, 34, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (15, 35, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (15, 35, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (16, 36, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (16, 36, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (17, 37, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (17, 37, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (18, 38, 'http://localhost:8080/sd/users/searchByLogin?login=User3', 'I want to see', false);
+VALUES (18, 38, 'http://localhost:8080/users/searchByLogin?login=User3', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (19, 38, 'http://localhost:8080/sd/users/searchByLogin?login=ED', 'I want to see', false);
+VALUES (19, 38, 'http://localhost:8080/users/searchByLogin?login=ED', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (20, 37, 'http://localhost:8080/sd/users/searchByLogin?login=ED', 'I want to see', false);
+VALUES (20, 37, 'http://localhost:8080/users/searchByLogin?login=ED', 'I want to see', false);
 INSERT INTO public.m_real_estate_activities_request (id, real_estate_activities_id, user_link, message, delete)
-VALUES (21, 36, 'http://localhost:8080/sd/users/searchByLogin?login=ED', 'I want to see', false);
+VALUES (21, 36, 'http://localhost:8080/users/searchByLogin?login=ED', 'I want to see', false);

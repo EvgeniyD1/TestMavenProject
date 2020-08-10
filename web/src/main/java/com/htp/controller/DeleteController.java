@@ -1,17 +1,17 @@
 package com.htp.controller;
 
-import com.htp.domain.HibernateActivities;
-import com.htp.domain.HibernateActivitiesRequest;
-import com.htp.domain.HibernateBuilding;
-import com.htp.domain.HibernateRole;
-import com.htp.domain.HibernateUser;
+import com.htp.domain.Activities;
+import com.htp.domain.ActivitiesRequest;
+import com.htp.domain.Building;
+import com.htp.domain.Role;
+import com.htp.domain.User;
 import com.htp.exceptions.ResourceNotFoundException;
-import com.htp.service.activity.ActivitySDService;
-import com.htp.service.activityrequest.ActivityRequestSDService;
-import com.htp.service.building.BuildingSDService;
+import com.htp.service.activity.ActivityService;
+import com.htp.service.activityrequest.ActivityRequestService;
+import com.htp.service.building.BuildingService;
 import com.htp.service.delete.DeleteService;
-import com.htp.service.role.RoleSDService;
-import com.htp.service.users.UserSDService;
+import com.htp.service.role.RoleService;
+import com.htp.service.users.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -34,24 +34,24 @@ import java.util.Optional;
 @RequestMapping("/delete")
 public class DeleteController {
 
-    private final UserSDService userSDService;
-    private final RoleSDService roleSDService;
-    private final BuildingSDService buildingSDService;
-    private final ActivitySDService activitySDService;
-    private final ActivityRequestSDService activityRequestSDService;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final BuildingService buildingService;
+    private final ActivityService activityService;
+    private final ActivityRequestService activityRequestService;
     private final DeleteService deleteService;
 
-    public DeleteController(UserSDService userSDService,
-                            RoleSDService roleSDService,
-                            BuildingSDService buildingSDService,
-                            ActivitySDService activitySDService,
-                            ActivityRequestSDService activityRequestSDService,
+    public DeleteController(UserService userService,
+                            RoleService roleService,
+                            BuildingService buildingService,
+                            ActivityService activityService,
+                            ActivityRequestService activityRequestService,
                             DeleteService deleteService) {
-        this.userSDService = userSDService;
-        this.roleSDService = roleSDService;
-        this.buildingSDService = buildingSDService;
-        this.activitySDService = activitySDService;
-        this.activityRequestSDService = activityRequestSDService;
+        this.userService = userService;
+        this.roleService = roleService;
+        this.buildingService = buildingService;
+        this.activityService = activityService;
+        this.activityRequestService = activityRequestService;
         this.deleteService = deleteService;
     }
 
@@ -68,8 +68,8 @@ public class DeleteController {
     })
     @PatchMapping("/delete/user/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long userId) {
-        Optional<HibernateUser> byId = userSDService.findById(userId);
-        HibernateUser user = byId.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        Optional<User> byId = userService.findById(userId);
+        User user = byId.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         deleteService.deleteUser(userId);
         String delete = "User with ID = " + user.getId() + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
@@ -89,8 +89,8 @@ public class DeleteController {
     })
     @PatchMapping("/restore/user/{id}")
     public ResponseEntity<String> restoreUser(@PathVariable("id") Long userId) {
-        Optional<HibernateUser> byId = userSDService.findById(userId);
-        HibernateUser user = byId.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        Optional<User> byId = userService.findById(userId);
+        User user = byId.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         deleteService.restoreUser(userId);
         String restore = "User with ID = " + user.getId() + " restored";
         return new ResponseEntity<>(restore, HttpStatus.OK);
@@ -110,8 +110,8 @@ public class DeleteController {
     })
     @PatchMapping("/delete/role/{id}")
     public ResponseEntity<String> deleteRole(@PathVariable("id") Long roleId) {
-        Optional<HibernateRole> roleOptional = roleSDService.findById(roleId);
-        HibernateRole role = roleOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        Optional<Role> roleOptional = roleService.findById(roleId);
+        Role role = roleOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         deleteService.deleteRole(roleId);
         String delete = "Role with ID = " + role.getId() + " deleted";
         return new ResponseEntity<>(delete, HttpStatus.OK);
@@ -131,8 +131,8 @@ public class DeleteController {
     })
     @PatchMapping("/restore/role/{id}")
     public ResponseEntity<String> restoreRole(@PathVariable("id") Long roleId) {
-        Optional<HibernateRole> roleOptional = roleSDService.findById(roleId);
-        HibernateRole role = roleOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
+        Optional<Role> roleOptional = roleService.findById(roleId);
+        Role role = roleOptional.orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
         deleteService.restoreRole(roleId);
         String restore = "Role with ID = " + role.getId() + " restored";
         return new ResponseEntity<>(restore, HttpStatus.OK);
@@ -152,8 +152,8 @@ public class DeleteController {
     })
     @PatchMapping("/delete/building/{id}")
     public ResponseEntity<String> deleteBuilding(@PathVariable("id") Long buildingId) {
-        Optional<HibernateBuilding> buildingOptional = buildingSDService.findById(buildingId);
-        HibernateBuilding building = buildingOptional.orElseThrow(() ->
+        Optional<Building> buildingOptional = buildingService.findById(buildingId);
+        Building building = buildingOptional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
         deleteService.deleteBuilding(buildingId);
         String delete = "Building with ID = " + building.getId() + " deleted";
@@ -174,8 +174,8 @@ public class DeleteController {
     })
     @PatchMapping("/restore/building/{id}")
     public ResponseEntity<String> restoreBuilding(@PathVariable("id") Long buildingId) {
-        Optional<HibernateBuilding> buildingOptional = buildingSDService.findById(buildingId);
-        HibernateBuilding building = buildingOptional.orElseThrow(() ->
+        Optional<Building> buildingOptional = buildingService.findById(buildingId);
+        Building building = buildingOptional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
         deleteService.restoreBuilding(buildingId);
         String restore = "Building with ID = " + building.getId() + " restored";
@@ -196,8 +196,8 @@ public class DeleteController {
     })
     @PatchMapping("/delete/activities/{id}")
     public ResponseEntity<String> deleteActivities(@PathVariable("id") Long activityId) {
-        Optional<HibernateActivities> optional = activitySDService.findById(activityId);
-        HibernateActivities activities = optional.orElseThrow(() ->
+        Optional<Activities> optional = activityService.findById(activityId);
+        Activities activities = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
         deleteService.deleteActivities(activityId);
         String delete = "Activities with ID = " + activities.getId() + " deleted";
@@ -218,8 +218,8 @@ public class DeleteController {
     })
     @PatchMapping("/restore/activities/{id}")
     public ResponseEntity<String> restoreActivities(@PathVariable("id") Long activityId) {
-        Optional<HibernateActivities> optional = activitySDService.findById(activityId);
-        HibernateActivities activities = optional.orElseThrow(() ->
+        Optional<Activities> optional = activityService.findById(activityId);
+        Activities activities = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
         deleteService.restoreActivities(activityId);
         String restore = "Activities with ID = " + activities.getId() + " restored";
@@ -240,8 +240,8 @@ public class DeleteController {
     })
     @PatchMapping("/delete/activities_request/{id}")
     public ResponseEntity<String> deleteActivitiesRequest(@PathVariable("id") Long activityRequestId) {
-        Optional<HibernateActivitiesRequest> optional = activityRequestSDService.findById(activityRequestId);
-        HibernateActivitiesRequest activitiesRequest = optional.orElseThrow(() ->
+        Optional<ActivitiesRequest> optional = activityRequestService.findById(activityRequestId);
+        ActivitiesRequest activitiesRequest = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
         deleteService.deleteActivitiesRequest(activityRequestId);
         String delete = "Activities request with ID = " + activitiesRequest.getId() + " deleted";
@@ -262,8 +262,8 @@ public class DeleteController {
     })
     @PatchMapping("/restore/activities_request/{id}")
     public ResponseEntity<String> restoreActivitiesRequest(@PathVariable("id") Long activityRequestId) {
-        Optional<HibernateActivitiesRequest> optional = activityRequestSDService.findById(activityRequestId);
-        HibernateActivitiesRequest activitiesRequest = optional.orElseThrow(() ->
+        Optional<ActivitiesRequest> optional = activityRequestService.findById(activityRequestId);
+        ActivitiesRequest activitiesRequest = optional.orElseThrow(() ->
                 new ResourceNotFoundException("Resource Not Found"));
         deleteService.restoreActivitiesRequest(activityRequestId);
         String restore = "Activities request with ID = " + activitiesRequest.getId() + " restored";

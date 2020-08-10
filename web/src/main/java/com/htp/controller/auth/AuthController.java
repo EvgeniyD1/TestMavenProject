@@ -1,9 +1,9 @@
 package com.htp.controller.auth;
 
-import com.htp.controller.springdata.users.UserSDSaveRequest;
-import com.htp.domain.HibernateUser;
+import com.htp.controller.springdata.users.UserSaveRequest;
+import com.htp.domain.User;
 import com.htp.security.util.TokenUtils;
-import com.htp.service.users.UserSDService;
+import com.htp.service.users.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -29,13 +29,13 @@ public class AuthController {
     private final TokenUtils tokenUtils;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final UserSDService service;
+    private final UserService service;
     private final ConversionService conversionService;
 
     public AuthController(TokenUtils tokenUtils,
                           AuthenticationManager authenticationManager,
                           @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
-                          UserSDService service,
+                          UserService service,
                           ConversionService conversionService) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
@@ -75,8 +75,8 @@ public class AuthController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @PostMapping("/registration")
-    public ResponseEntity<HibernateUser> create(@Valid @RequestBody UserSDSaveRequest request) {
-        HibernateUser user = conversionService.convert(request, HibernateUser.class);
+    public ResponseEntity<User> create(@Valid @RequestBody UserSaveRequest request) {
+        User user = conversionService.convert(request, User.class);
         return new ResponseEntity<>(service.save(Objects.requireNonNull(user)), HttpStatus.CREATED);
     }
 }
